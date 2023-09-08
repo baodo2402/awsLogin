@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-const registerUrl = 'https://lyg1apc3wl.execute-api.ap-southeast-2.amazonaws.com/register';
+
+const registerUrl = 'https://lyg1apc3wl.execute-api.ap-southeast-2.amazonaws.com/prod/register';
 
 
 const Register = () => {
@@ -18,7 +19,9 @@ const Register = () => {
         }
 
         const requestConfig = {
-            'x-api-key': 'EmYB7EcYzn2NK1dUkD2kK8MA18r5dp6tQ7wB7U1d'
+            headers: {
+                'x-api-key': 'EmYB7EcYzn2NK1dUkD2kK8MA18r5dp6tQ7wB7U1d'
+            }
         }
         const requestBody = {
             username: username,
@@ -31,7 +34,7 @@ const Register = () => {
         axios.post(registerUrl, requestBody, requestConfig).then(response => {
             setMessage('Register Successful');
         }).catch(error => {
-            if (error.response.status == 401) {
+            if (error.response && (error.response.status === 401 || error.response.status === 403)) {
                 setMessage(error.response.data.message);
             }
             else {
@@ -39,7 +42,7 @@ const Register = () => {
             }
         })
 
-        console.log("submit button is pressed!")
+        // console.log("submit button is pressed!")
     }
 
 
