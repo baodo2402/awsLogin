@@ -17,7 +17,7 @@ const Register = () => {
             setMessage('All fields are required');
             return;
         }
-
+        setMessage(null);
         const requestConfig = {
             headers: {
                 'x-api-key': 'EmYB7EcYzn2NK1dUkD2kK8MA18r5dp6tQ7wB7U1d'
@@ -38,7 +38,7 @@ const Register = () => {
                 setMessage(error.response.data.message);
             }
             else {
-                setMessage('Sorry... backend server is down, please try again later')
+                setMessage('Sorry, backend server is down, please try again later')
             }
         })
 
