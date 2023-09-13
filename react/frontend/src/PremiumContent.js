@@ -1,10 +1,10 @@
 import React from 'react';
 import { getUser, resetUserSession } from './service/AuthService';
 import LocationFinder from './service/LocationFinderService';
-
+const user = getUser();
+const name = user !== 'undefined' && user ? user.name : '';
+const loginUsername = user !== 'undefined' && user ? user.username : '';
 const PremiumContent = (props) => {
-    const user = getUser();
-    const name = user !== 'undefined' && user ? user.name : '';
     
     const logoutHandler = () => {
         resetUserSession();
@@ -18,5 +18,5 @@ const PremiumContent = (props) => {
         </div>
     )
 }
-
+export { loginUsername };
 export default PremiumContent;

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { loginUsername } from '../PremiumContent';
 
 const addressUrl = 'https://lyg1apc3wl.execute-api.ap-southeast-2.amazonaws.com/prod/csvAddress';
 const timeInUrl = 'https://lyg1apc3wl.execute-api.ap-southeast-2.amazonaws.com/prod/timein';
@@ -49,10 +50,23 @@ const LocationFinder = () => {
             ) {
             const timeIn = new Date().toLocaleString("en-AU", {
               timeZone: "Australia/Sydney",
-          });
-            setStatus('You are working at: ' + csvData[i].street + ' ' + csvData[i].suburb + '\n at ' + timeIn);
-            setIsWorking(true);
-            matchFound = true;
+            });
+            const requestBodyTimeIn = {
+              username: loginUsername,
+              timeIn: timeIn
+            }
+            axios.post(timeInUrl, requestBodyTimeIn, requestConfig).then(response => {
+              setStatus('You are working at: ' + csvData[i].street + ' ' + csvData[i].suburb + '\n at ' + timeIn);
+              setIsWorking(true);
+              matchFound = true;
+            }).catch(error => {
+              if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+                  setMessage(error.response.data.message);
+              }
+              else {
+                  setMessage('Sorry, backend server is down, please try again later')
+              }
+          })
             break;
           }
           else if (
@@ -61,8 +75,25 @@ const LocationFinder = () => {
             csvData[i].suburb === data.address.suburb
           
           ) {
-            setStatus('You are finished');
-            setIsWorking(false);
+            const timeOut = new Date().toLocaleString("en-AU", {
+              timeZone: "Australia/Sydney",
+            });
+            const requestBodyTimeOut = {
+              username: loginUsername,
+              timeOut: timeOut
+            }
+            axios.post(timeOutUrl, requestBodyTimeOut, requestConfig).then(response => {
+              setStatus('You are finished at ' + timeOut);
+              setIsWorking(false);
+            }).catch(error => {
+              if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+                  setMessage(error.response.data.message);
+              }
+              else {
+                  setMessage('Sorry, backend server is down, please try again later')
+              }
+          })
+            
             break;
           }
           else if(!matchFound) {
