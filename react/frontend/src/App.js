@@ -30,7 +30,7 @@ function App() {
       token: token
     }
 
-    axios.post(verifyTokenAPIURL, requestConfig, requestBody).then(response => {
+    axios.post(verifyTokenAPIURL, requestBody, requestConfig).then(response => {
       setUserSession(response.data.user, response.data.token);
       setAuthenicating(false);
     }).catch(() => {

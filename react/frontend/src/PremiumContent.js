@@ -1,7 +1,8 @@
 import React from 'react';
 import { getUser, resetUserSession } from './service/AuthService';
+import LocationFinder from './service/LocationFinderService';
 
-const PremiunContent = (props) => {
+const PremiumContent = (props) => {
     const user = getUser();
     const name = user !== 'undefined' && user ? user.name : '';
     
@@ -13,8 +14,9 @@ const PremiunContent = (props) => {
         <div>
             Hello {name}, you logged in.<br/>
             <input type="button" value="Logout" onClick={logoutHandler} />
+            <LocationFinder />
         </div>
     )
 }
 
-export default PremiunContent;
+export default PremiumContent;
