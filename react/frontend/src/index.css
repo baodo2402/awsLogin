@@ -1,3 +1,7 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto+Slab:100,300,400,700");
+@import url("https://fonts.googleapis.com/css?family=Raleway:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i");
+
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,30 +9,157 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: url("./image/peace.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100vh;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+h1 {
+  font-size: 2.1rem;
+  letter-spacing: 0px;
+  line-height: 1em;
+  /* background: linear-gradient(
+    90deg,
+    rgb(255, 255, 255) 0%,
+    rgba(224, 156, 101, 0) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; */
+  width: fit-content;
+  padding: 3rem 1.5rem 1.5rem 1.5rem;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-family: var(--font-roboto);
+  --font-roboto: "Roboto Slab", serif;
+  --font-raleway: "Raleway", sans-serif;
+  position: absolute;
+  top: 15px;
+  text-align: center;
+  z-index: 9;
+  color: white;
+  text-shadow: 2px 2px 0 #e7bd92,
+              3px 3px 0 #a37c13;
+}
 .header {
-  margin: 2em 0 2em 2em;
-  padding-bottom: 1em;
+  margin-bottom: 0;
+  
   border-bottom: 1px solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 62px;
+  background-color: #4682b4;
+  font-size:large;
+
 }
 .header a {
   margin: 0 1em 0 1em;
-  font-size: 1.2em;
+  font-size: 1em;
+  font-weight: 600;
+  color:rgb(249, 249, 239);
   text-decoration: none;
+  padding: 7% 1% 8% 2%;
 }
 
 .content {
   margin-left: 2em;
-  font-size: 1.5em;
+  font-size: 1.3em;
 }
 
 .message {
   color: red;
   font-size: 0.7em;
+}
+input[type="text"],
+input[type="password"]{
+  width: 85%;
+  padding: 6px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-size: 20px;
+  background-color: rgb(252, 237, 248);
+}
+input[type="submit"] {
+  
+  width: 6em;
+  height: 2em;
+  color:rgb(249, 249, 239);
+  font-size: large;
+  font-weight: 700;
+  position: absolute;
+  right: 10%;
+  border-radius: 12px;
+  border: 1px solid;
+  background-color: #f4af38;
+  text-align: center;
+  box-shadow: 3px 3px 3px -1px rgba(10, 99, 169, 0.16),
+              -3px -3px 3px -1px rgba(255, 255, 255, 0.70);
+}
+input[type="submit"]:active {
+  background-color: #fcd89a;
+}
+
+.login-layout, .register-layout{
+  padding: 3% 0 25% 10%;
+  margin: 5% 2% 0 2%;
+  background-color:#f6f1f1;
+  border-radius: 7%;
+  box-shadow: 4px 4px 4px -1px rgba(10, 99, 169, 0.16),
+              -4px -4px 4px -1px rgba(255, 255, 255, 0.70);
+}
+h5 {
+  font-size: 17px;
+}
+.account-layout {
+  font-weight: 500;
+  color: #f6f1f1;
+  padding: 10px 20px 17px 10px;
+  margin: 0 0 0 0;
+  background-color: #165789;
+  box-shadow: 4px 4px 4px -1px rgba(10, 99, 169, 0.16),
+              -4px -4px 4px -1px rgba(255, 255, 255, 0.70);
+} 
+
+.dropdown-input {
+  display: block;
+}
+
+
+.dropdown-button{
+  color: white;
+  /* display: inline-block; */
+  position: absolute;
+  top: 0px;
+  right: 8px;
+  font-size: 28px;
+}
+
+#menu-toggle {
+  z-index: 1;
+  display: none;
+  
+}
+#dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0em;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  align-items: left;
+  transition: left 2s ease;
+  
+}
+#menu-toggle:checked + .dropdown-button + #dropdown-content {
+  display: block;
 }

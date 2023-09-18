@@ -5,6 +5,9 @@ const verifyService = require("./service/verify");
 const addressService = require("./service/address");
 const shiftTrackingService = require("./service/timeIn");
 const timeOutService = require("./service/timeOut");
+const triggerChangeInfoService = require("./service/triggerChangeInfo");
+const changeInfoService = require("./service/changeInfo");
+const getUserProfileService = require("./service/getUserProfile");
 
 const util = require('./utils/util');
 
@@ -15,7 +18,8 @@ const verifyPath = '/verify';
 const addressPath = '/csvAddress';
 const addLocationPath = '/timein';
 const timeOutPath = '/timeout';
-
+const triggerChangeInfoPath = '/triggerchangeinfo';
+const changeInfoPath = '/changeinfo';
 
 exports.handler = async (event) => {
   console.log('Request Event: ', event);
@@ -47,6 +51,18 @@ exports.handler = async (event) => {
       const timeOutBody = JSON.parse(event.body);
       response = await timeOutService.timeOut(timeOutBody);
       //response = util.buildResponse(200);
+      break;
+    case event.httpMethod === 'POST' && event.path === triggerChangeInfoPath:
+      const triggerChangeInfoBody = JSON.parse(event.body);
+      response = await triggerChangeInfoService.triggerChangeInfo(triggerChangeInfoBody);
+      break;
+    case event.httpMethod === 'POST' && event.path === changeInfoPath:
+      const changeInfoBody = JSON.parse(event.body);
+      response = await changeInfoService.changeInfo(changeInfoBody);
+      break;
+    case event.httpMethod === 'GET' && event.path === triggerChangeInfoPath:
+      const getUserProfileBody = JSON.parse(event.body);
+      response = await getUserProfileService.getUserProfile(getUserProfileBody);
       break;
     default:
       response = await util.buildResponse(404, "404 Not Found");

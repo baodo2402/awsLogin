@@ -3,7 +3,7 @@ import React from 'react';
 const Home = () => {
     return (
         <div>
-            home page
+            <h1>Clean 'n' Tidy Property Services</h1>
         </div>
     )
 }

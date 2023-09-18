@@ -13,6 +13,7 @@ const userTable = 'jinmeister-users';
 async function login(user) {
     const username = user.username;
     const password = user.password;
+
     if (!user || !username || !password) {
         return util.buildResponse(401, {
             message: 'username and password are required'
@@ -33,7 +34,8 @@ async function login(user) {
 
     const userInfo = {
         username: dynamoUser.username,
-        name: dynamoUser.name
+        name: dynamoUser.name,
+        email: dynamoUser.email
     }
 
     const token = auth.generateToken(userInfo);

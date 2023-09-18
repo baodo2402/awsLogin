@@ -1,17 +1,8 @@
 import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
-import { getToken } from '../service/AuthService';
+import { Outlet } from 'react-router-dom';
 
-const PublicRoute = ({ component: Component, ...rest}) => {
-    return (
-        <Route
-            {...rest}
-            render={props => {
-                return !getToken() ? <Component {...props} />
-                : <Redirect to ={{ pathname: '/premium-content'}} />
-            }}
-        />
-    )
-}
+const PublicRoute = () => {
+  return <Outlet />;
+};
 
 export default PublicRoute;

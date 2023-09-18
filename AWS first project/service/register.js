@@ -28,7 +28,7 @@ async function register(userInfo) {
     const dynamoUser = await getUser(username.toLowerCase().trim());
     if (dynamoUser && dynamoUser.username) {
         return util.buildResponse(401, {
-            message: 'username already exists in our database, please choose a different username'
+            message: 'username already exists, please choose a different username'
         })
     }
 

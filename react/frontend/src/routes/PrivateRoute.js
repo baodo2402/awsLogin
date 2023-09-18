@@ -1,17 +1,30 @@
+// import React from 'react';
+// import { Route, Navigate } from 'react-router-dom';
+// import { getToken } from '../service/AuthService';
+
+// const PrivateRoute = ({ element: Element, ...rest }) => {
+//   return (
+//     <Route
+//       {...rest}
+//       element={
+//         getToken() ? (
+//           <Element />
+//         ) : (
+//           // Redirect to the login route using the Navigate component
+//           <Navigate to="/login" replace={true} />
+//         )
+//       }
+//     />
+//   );
+// };
+
+// export default PrivateRoute;
 import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { getToken } from '../service/AuthService';
 
-const PrivateRoute = ({ component: Component, ...rest}) => {
-    return (
-        <Route
-            {...rest}
-            render={props => {
-                return getToken() ? <Component {...props} />
-                : <Redirect to ={{ pathname: '/login'}} />
-            }}
-        />
-    )
-}
+const PrivateRoute = ({isAuthenticated}) => {
+  return !isAuthenticated ? <Outlet /> : <Navigate to="/" />;
+};
 
 export default PrivateRoute;
