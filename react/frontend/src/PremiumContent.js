@@ -26,6 +26,9 @@ const PremiumContent = (props) => {
     const profileHandler = () => {
         navigate('/profile');
     }
+    const canlendarHandler = () => {
+        navigate('/calendar');
+    }
     const button = {
         fontWeight: '600',
         fontSize: '15px',
@@ -48,7 +51,8 @@ const PremiumContent = (props) => {
                 <label className='dropdown-button' htmlFor="menu-toggle">&#9776;</label>
                 <section id='dropdown-content'>
                     <input style={button} type="button" value="Logout" onClick={logoutHandler} /><br />
-                    <input style={button} type='button' value="Profile" onClick={profileHandler} />
+                    <input style={button} type='button' value="Profile" onClick={profileHandler} /><br />
+                    <input style={button} type='button' value="Calendar" onClick={canlendarHandler} />
                 </section>
             
             

@@ -9,7 +9,7 @@ const addressUrl = 'https://lyg1apc3wl.execute-api.ap-southeast-2.amazonaws.com/
 const timeInUrl = 'https://lyg1apc3wl.execute-api.ap-southeast-2.amazonaws.com/prod/timein';
 const timeOutUrl = 'https://lyg1apc3wl.execute-api.ap-southeast-2.amazonaws.com/prod/timeout';
 
-const LocationFinder = () => {
+export default function LocationFinder() {
   const user = getUser();
   const loginUsername = user !== 'undefined' && user ? user.username : '';
   const [status, setStatus] = useState('');
@@ -31,7 +31,7 @@ const LocationFinder = () => {
   axios.get(addressUrl, requestConfig)
     .then((response) => {
       setCsvData(response.data);
-      //console.log('CSV Data:', response.data);
+      console.log('CSV Data:', response.data);
     })
     .catch((error) => {
       console.error(error);
@@ -57,6 +57,8 @@ const LocationFinder = () => {
             csvData[i].street  === data.address.road &&
             csvData[i].suburb === data.address.suburb
             ) {
+            localStorage.setItem('userStreet', csvData[i].street);
+            localStorage.setItem('userSuburb', csvData[i].suburb);
             const timeIn = new Date().toLocaleString("en-AU", {
               timeZone: "Australia/Sydney",
             });
@@ -141,7 +143,7 @@ const LocationFinder = () => {
 
     const punchClock = () => {
       setIsWorking(false);
-      //setCallUsername(loginUsername);
+      setCallUsername(loginUsername);
 
       console.log("Punch Clock clicked " + loginUsername);
       setShowClockButtons(true);
@@ -162,5 +164,4 @@ const LocationFinder = () => {
     </div>
   );
 };
-
-export default LocationFinder;
+//export default LocationFinder;

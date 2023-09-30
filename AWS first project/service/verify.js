@@ -27,5 +27,4 @@ function verify(requestBody) {
     })
 }
 
-
 module.exports.verify = verify;

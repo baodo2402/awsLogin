@@ -5,6 +5,7 @@ import Login from "./Login";
 import PremiumContent from "./PremiumContent";
 import ChangeInfo from "./ChangeInfo";
 import Profile from "./Profile";
+import Calendar from "./service/Calendar";
 import PublicRoute from "./routes/PublicRoute";
 import PrivateRoute from "./routes/PrivateRoute";
 import React, { useState, useEffect } from "react";
@@ -82,7 +83,7 @@ function App() {
                 <Route
                   path="/premium-content" element={<PremiumContent />}
                 />
-              </Route>
+              </Route> 
 
               <Route element={<PrivateRoute isAuthenticated={isAuthenticating}/>}>
                 <Route path="/profile" element={<Profile />}/>
@@ -90,6 +91,11 @@ function App() {
               <Route element={<PrivateRoute isAuthenticated={isAuthenticating}/>}>
                 <Route path="/changeInfo" element={<ChangeInfo />}/>
               </Route>
+
+              <Route element={<PrivateRoute isAuthenticated={isAuthenticating}/>}>
+                <Route path="/calendar" element={<Calendar />} />
+              </Route>
+
               
             </Routes>
           </>

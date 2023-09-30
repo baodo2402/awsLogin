@@ -8,6 +8,7 @@ const timeOutService = require("./service/timeOut");
 const triggerChangeInfoService = require("./service/triggerChangeInfo");
 const changeInfoService = require("./service/changeInfo");
 const getUserProfileService = require("./service/getUserProfile");
+const updateCalendarService = require("./service/updateCalendar");
 
 const util = require('./utils/util');
 
@@ -20,6 +21,7 @@ const addLocationPath = '/timein';
 const timeOutPath = '/timeout';
 const triggerChangeInfoPath = '/triggerchangeinfo';
 const changeInfoPath = '/changeinfo';
+const calendarPath = '/calendar';
 
 exports.handler = async (event) => {
   console.log('Request Event: ', event);
@@ -63,6 +65,10 @@ exports.handler = async (event) => {
     case event.httpMethod === 'GET' && event.path === triggerChangeInfoPath:
       const getUserProfileBody = JSON.parse(event.body);
       response = await getUserProfileService.getUserProfile(getUserProfileBody);
+      break;
+    case event.httpMethod === 'POST' && event.path === calendarPath:
+      const updateCalendarBody = JSON.parse(event.body);
+      response = await updateCalendarService.updateCalendar(updateCalendarBody);
       break;
     default:
       response = await util.buildResponse(404, "404 Not Found");
