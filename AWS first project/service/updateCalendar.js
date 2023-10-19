@@ -14,10 +14,11 @@ async function updateCalendar(userInfo) {
     const task = userInfo.task;
     const status = userInfo.status;
     const recurrence_pattern = userInfo.recurrence_pattern;
+    const dayOfWeek = userInfo.dayOfWeek;
 
         //check if any field is not filled yet
     if(!Date || !username || !task || status == 'undefined' || status == null || !tableName || 
-        !recurrence_pattern) {
+        !recurrence_pattern || !dayOfWeek) {
         return util.buildResponse(401, {
             message: 'All fields are required'
         })
@@ -28,7 +29,8 @@ async function updateCalendar(userInfo) {
         username: username.toLowerCase().trim(),
         task: task,
         status: status,
-        recurrence_pattern: recurrence_pattern
+        recurrence_pattern: recurrence_pattern,
+        dayOfWeek: dayOfWeek
     }
 
     //save object to the database
