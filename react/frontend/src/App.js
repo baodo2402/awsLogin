@@ -6,6 +6,7 @@ import PremiumContent from "./PremiumContent";
 import ChangeInfo from "./ChangeInfo";
 import Profile from "./Profile";
 import Calendar from "./service/Calendar";
+import MonthlyCalendar from "./service/testCalendar";
 import PublicRoute from "./routes/PublicRoute";
 import PrivateRoute from "./routes/PrivateRoute";
 import React, { useState, useEffect } from "react";
@@ -49,12 +50,6 @@ function App() {
   }, [isAuthenticating]);
 
   const token = getToken();
-  
-  // if(token) {
-  //   setIsAuthenticated(true);
-  // } else {
-  //   setIsAuthenticated(false);
-  // }
 
   return (
     <div className="App">
@@ -92,10 +87,13 @@ function App() {
                 <Route path="/changeInfo" element={<ChangeInfo />}/>
               </Route>
 
-              <Route element={<PrivateRoute isAuthenticated={isAuthenticating}/>}>
+              {/* <Route element={<PrivateRoute isAuthenticated={isAuthenticating}/>}>
                 <Route path="/calendar" element={<Calendar />} />
-              </Route>
+              </Route> */}
 
+              <Route element={<PrivateRoute isAuthenticated={isAuthenticating}/>}>
+                <Route path="/monthlycanlendar" element={<MonthlyCalendar />} />
+              </Route>
               
             </Routes>
           </>

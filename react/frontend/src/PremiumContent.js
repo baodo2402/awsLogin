@@ -29,6 +29,9 @@ const PremiumContent = (props) => {
     const canlendarHandler = () => {
         navigate('/calendar');
     }
+    const testCanlendarHandler = () => {
+        navigate('/monthlycanlendar')
+    }
     const button = {
         fontWeight: '600',
         fontSize: '15px',
@@ -52,7 +55,8 @@ const PremiumContent = (props) => {
                 <section id='dropdown-content'>
                     <input style={button} type="button" value="Logout" onClick={logoutHandler} /><br />
                     <input style={button} type='button' value="Profile" onClick={profileHandler} /><br />
-                    <input style={button} type='button' value="Calendar" onClick={canlendarHandler} />
+                    {/* <input style={button} type='button' value="Calendar" onClick={canlendarHandler} /><br /> */}
+                    <input style={button} type='button' value="Test Calendar" onClick={testCanlendarHandler} />
                 </section>
             
             
