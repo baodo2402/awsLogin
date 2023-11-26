@@ -1,4 +1,4 @@
-import { BrowserRouter, NavLink, Routes, Route, useLocation} from "react-router-dom";
+import { BrowserRouter, NavLink, Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import Home from "./Home";
 import Register from "./Register";
 import Login from "./Login";
@@ -6,9 +6,14 @@ import PremiumContent from "./PremiumContent";
 import ChangeInfo from "./ChangeInfo";
 import Profile from "./Profile";
 import Calendar from "./service/Calendar";
-import MonthlyCalendar from "./service/testCalendar";
+import CalendarOptions from "./service/CalendarOptions";
+import ForgetPassword from "./ForgetPassword";
 import PublicRoute from "./routes/PublicRoute";
 import PrivateRoute from "./routes/PrivateRoute";
+import ResetPassword from "./ResetPassword";
+import CalendarSearch from "./CalendarSearch";
+import './index.css'
+
 import React, { useState, useEffect } from "react";
 import { getUser, getToken, setUserSession, resetUserSession } from "./service/AuthService";
 import axios from "axios";
@@ -87,12 +92,24 @@ function App() {
                 <Route path="/changeInfo" element={<ChangeInfo />}/>
               </Route>
 
-              {/* <Route element={<PrivateRoute isAuthenticated={isAuthenticating}/>}>
+              <Route element={<PrivateRoute isAuthenticated={isAuthenticating}/>}>
                 <Route path="/calendar" element={<Calendar />} />
-              </Route> */}
+              </Route>
 
               <Route element={<PrivateRoute isAuthenticated={isAuthenticating}/>}>
-                <Route path="/monthlycanlendar" element={<MonthlyCalendar />} />
+                <Route path="/calendaroption" element={<CalendarOptions />} />
+              </Route>
+
+              <Route element={<PublicRoute />}>
+                <Route path="/forgetpassword" element={<ForgetPassword />} />
+              </Route>
+
+              <Route element={<PublicRoute />}>
+                <Route path="/resetpassword" element={<ResetPassword />} />
+              </Route>
+    
+              <Route element={<PrivateRoute isAuthenticated={isAuthenticating}/>}>
+                <Route path="/calendarsearching" element={<CalendarSearch />} />
               </Route>
               
             </Routes>
@@ -104,6 +121,7 @@ function App() {
 }
 
 function Header() {
+  const navigate = useNavigate();
   const location = useLocation(); // Hook for location
   // Define an array of routes where the header should be displayed
   const routesWithHeader = ["/", "/register", "/login"];
@@ -111,18 +129,36 @@ function Header() {
   // Check if the current route is in the array
   const displayHeader = routesWithHeader.includes(location.pathname);
 
+  const handleHome = () => {
+    navigate('/')
+  }
+  
+  const handleRegister = () => {
+    navigate('/register')
+  }
+  
+  const handleLogin = () => {
+    navigate('/login')
+  }
   return (
     displayHeader && (
       <div className="header">
-        <NavLink activeclassname="active" to="/">
+        <div className="background"></div>
+         <input type="radio" name="hi" id="home" onChange={handleHome} defaultChecked/>
+        <label htmlFor="home" style={{position: "absolute", left: "35px"}}>
           Home
-        </NavLink>
-        <NavLink activeclassname="active" to="/register">
+        </label>
+
+        <input type="radio" name="hi" id="register" onChange={handleRegister} />
+        <label htmlFor="register" id="register-label">
           Register
-        </NavLink>
-        <NavLink activeclassname="active" to="/login">
+        </label>
+
+        <input type="radio" name="hi" id="login" onChange={handleLogin} />
+        <label htmlFor="login" style={{position: "absolute", right: "35px"}} >
           Login
-        </NavLink>
+        </label>
+        <span className="indicator"></span>
       </div>
     )
   );

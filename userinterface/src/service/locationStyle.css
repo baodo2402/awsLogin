@@ -1,0 +1,74 @@
+.punch-button {
+  padding: 10px 20px;
+  position: relative;
+  margin: 0 auto;
+  margin-top: 85px;
+  color:rgb(249, 249, 239);
+  font-size: large;
+  font-weight: 600;
+  border-radius: 12px;
+  border: 1px solid;
+  background-color: #ef974f;
+  display: block;
+  text-align: center;
+  box-shadow: 3px 3px 3px -1px rgba(10, 99, 169, 0.16),
+              -3px -3px 3px -1px rgba(255, 255, 255, 0.70);
+}
+.clockout {
+    color: rgb(215, 108, 41);
+    font-size: 14px;
+    font-weight: 700;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    position: relative;
+    margin-top: 35px;
+    margin-left: 15%;
+    border: none;
+    background-color: #f6eded;
+    box-shadow: inset 4px 4px 4px -1px rgba(10, 99, 169, 0.16),
+              inset -4px -4px 4px -1px rgba(255, 255, 255, 0.70);
+  }
+.clockin {
+    color: rgb(75, 192, 36);
+    font-size: 14px;
+    font-weight: 700;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    position: relative;
+    border: none;
+    background-color: #ecf0ea;
+    box-shadow: 3px 3px 3px -1px rgba(10, 99, 169, 0.16),
+              -3px -3px 3px -1px rgba(255, 255, 255, 0.70);
+  }
+
+.punch-button:active{
+  background-color: #fcd89a;
+}
+.clockin:active, .clockout:active {
+  background-color: #ffffff;
+}
+.clockin-clockout {
+  position: relative;
+  margin-top: 25px;
+  margin-bottom: 0;
+  padding: 0 0 100% 0;
+  height:16em;
+  display: block;
+  text-align: center;
+  background-color:#f6f1f1;
+  border-radius: 7% 7% 0 0;
+  box-shadow: 4px 4px 4px -1px rgba(10, 99, 169, 0.16),
+              -4px -4px 4px -1px rgba(10, 99, 169, 0.16);
+  
+}
+  .status {
+    position: relative;
+    margin-top: 25px;
+    text-align: center;
+    font-weight: 600;
+    display: block;
+
+  }
+  

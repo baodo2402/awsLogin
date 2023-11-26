@@ -1,0 +1,22 @@
+.register-layout {
+    padding: 0;
+    margin: 5% 2% 0 2%;
+    background-color:#f6f1f1;
+    border-radius: 15px;
+    box-shadow: 5px 5px 20px rgba(0.5, 0.5, 0.5, 0.5);
+  }
+.register-layout form {
+    padding: 3% 0 25% 10%;
+}
+.register-head {
+    background-color: #ea9c58ef;
+    border-radius: 15px 15px 0 0;
+    text-align: center;
+    padding: 1px 0 1px 0;
+    color: white;
+}
+.message {
+    position: relative;
+    left: 1em;
+    font-size: 16px;
+}

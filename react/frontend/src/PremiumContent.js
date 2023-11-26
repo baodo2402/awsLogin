@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { getUser, resetUserSession } from './service/AuthService';
 import LocationFinder from './service/LocationFinderService';
 import { useNavigate } from 'react-router-dom';
-import './index.css';
+//import './index.css';
+import './premiumContentStyle.css'
+import { HiOutlineLogout } from 'react-icons/hi';
+import { BsCalendarCheck } from 'react-icons/bs';
+import { CgProfile } from 'react-icons/cg';
+import Logo from './image/cleanntidyLogo.png';
+import { Header } from './Header';
+
 
 const PremiumLayout = ({ children }) => {
     return (
@@ -26,44 +33,61 @@ const PremiumContent = (props) => {
     const profileHandler = () => {
         navigate('/profile');
     }
+
+    const admindCalendarhadler = () => {
+        navigate('/calendaroption')
+    }
     const canlendarHandler = () => {
-        navigate('/calendar');
-    }
-    const testCanlendarHandler = () => {
-        navigate('/monthlycanlendar')
-    }
-    const button = {
-        fontWeight: '600',
-        fontSize: '15px',
-        textAlign: 'center',
-        paddingBottom: '5px',
-        paddingTop: '5px',
-        display: 'inline-block',
-        alignItems: 'right',
-        width: '9em',
-        height: '2.25em'
+        const userEmail = user && user ? user.email : '';
+        if (userEmail === 'cleanntidy.au@outlook.com' || userEmail === 'thienbao1084@gmail.com' || userEmail === 'danghung0224@gmail.com') {
+            navigate('/calendarsearching');
+        } else {
+            navigate('/calendar');
+        }
+        
     }
     
-    return (
-        <PremiumLayout>
-        <div className='account-layout'>
-            Hello {name}
+    const [isActive, setIsActive] = useState(false);
 
-            
+     const toggleMenu = () => {
+        setIsActive(!isActive);
+     };
+
+    
+    return (
+        <div>
+
+        <header className='account-layout'>
+            <img src={Logo}
+                style={{ width: '1.2em', height: '1.2em', objectFit: 'cover',
+                 }} />   Hello {name}
                 <input type='checkbox' id="menu-toggle" className='dropdown-input' />
-                <label className='dropdown-button' htmlFor="menu-toggle">&#9776;</label>
+                <label className={`hamburger ${isActive ? 'active' : ''}` } htmlFor="menu-toggle" onClick={toggleMenu}>
+                    <div className="line"></div>
+                    <div className="line"></div>
+                    <div className="line"></div>
+                </label>
+
                 <section id='dropdown-content'>
-                    <input style={button} type="button" value="Logout" onClick={logoutHandler} /><br />
-                    <input style={button} type='button' value="Profile" onClick={profileHandler} /><br />
-                    {/* <input style={button} type='button' value="Calendar" onClick={canlendarHandler} /><br /> */}
-                    <input style={button} type='button' value="Test Calendar" onClick={testCanlendarHandler} />
+                    <button id="item" style={{'--i': 1}}  onClick={logoutHandler}>
+                        Logout <HiOutlineLogout />
+                    </button><br />
+                    <button id="item" style={{'--i': 2}} onClick={profileHandler}>
+                    Profile <CgProfile />
+                    </button><br />
+                    <button id="item" style={{'--i': 3}} onClick={canlendarHandler}>
+                        Calendar <BsCalendarCheck />
+                    </button>
                 </section>
             
-            
-            
-        </div>
+        </header>
+                 <div className='blank'></div>
+                <div className='background-img'></div>
         <LocationFinder />
-        </PremiumLayout>
+
+        </div>
+        
+
     )
 }
 // const user = getUser();

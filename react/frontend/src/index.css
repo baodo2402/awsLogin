@@ -1,26 +1,44 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto+Slab:100,300,400,700");
 @import url("https://fonts.googleapis.com/css?family=Raleway:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i");
 
+:root {
+  --primary-bg: #242526;
+  --secondary-bg: #fff;
+  --primary-text-color: #555;
+  --secondary-text-color: #cecece;
+  --speed: 500ms;
+}
 
-body {
+html, body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: url("./image/peace.jpg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  height: 100vh;
+
+  min-height: 100vh; /* Set a minimum height */
+  overflow: hidden;
+  z-index: -2;
 }
 
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  min-height: 100%;
+  background-image: url("./image/peace.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  z-index: -1;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-h1 {
+.home-title {
   font-size: 2.1rem;
   letter-spacing: 0px;
   line-height: 1em;
@@ -43,7 +61,7 @@ h1 {
   --font-roboto: "Roboto Slab", serif;
   --font-raleway: "Raleway", sans-serif;
   position: absolute;
-  top: 15px;
+  top: 5em;
   text-align: center;
   z-index: 9;
   color: white;
@@ -52,14 +70,14 @@ h1 {
 }
 .header {
   margin-bottom: 0;
-  
-  border-bottom: 1px solid;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 62px;
-  background-color: #4682b4;
+  background-color: rgba(229, 163, 93, 0.884);
   font-size:large;
+  box-shadow: 2px 2px 5px rgba(0.3, 0.3, 0.3, 0.3);
+  z-index: 2;
 
 }
 .header a {
@@ -71,6 +89,97 @@ h1 {
   padding: 7% 1% 8% 2%;
 }
 
+.header span {
+  position: absolute;
+  top: 8px;
+  left: 35px;
+  width: 9%;
+
+  height: 45px;
+  border-bottom: 3px solid #f3d1d1;
+  background-clip: padding-box;
+  z-index: 0;
+  transition: .5s;
+}
+#home, #login, #register {
+  display: none;
+}
+
+#home:checked ~ .indicator {
+  left: 35px;
+}
+#register:checked ~ .indicator {
+  left: 45%;
+  width: 10%;
+}
+#login:checked ~ .indicator {
+  left: 81%;
+  width: 9%;
+}
+@media (min-width: 445px) {
+  #home:checked ~ .indicator {
+    width: 10%;
+  }
+  #login:checked ~ .indicator {
+    left: 83%;
+    width: 9%;
+  }
+}
+@media (min-width: 500px) {
+  #home:checked ~ .indicator {
+    width:9%;
+  }
+  #login:checked ~ .indicator {
+    left: 85%;
+    width: 9%;
+  }
+}
+@media (min-width: 600px) {
+  #home:checked ~ .indicator {
+    width:7%;
+  }
+  #login:checked ~ .indicator {
+    left: 87%;
+    width: 8%;
+  }
+}
+@media (min-width: 680px) {
+  #home:checked ~ .indicator {
+    width:7%;
+  }
+  #login:checked ~ .indicator {
+    left: 87%;
+    width: 10%;
+  }
+}
+@media (min-width: 800px) {
+  #home:checked ~ .indicator {
+    width:6%;
+  }
+  #login:checked ~ .indicator {
+    left: 90%;
+    width: 8%;
+  }
+}
+
+.header label {
+  color: white;
+  font-weight: 700;
+}
+
+.header .indicator {
+  position: absolute;
+  top: 8px;
+  left: 40px;
+  width: 11%;
+  height: 45px;
+  border-bottom: 3px solid #f3d1d1;
+  background-clip: padding-box;
+  z-index: 0;
+  transition: 0.5s;
+}
+
+
 .content {
   margin-left: 2em;
   font-size: 1.3em;
@@ -81,18 +190,20 @@ h1 {
   font-size: 0.7em;
 }
 input[type="text"],
+input[type="email"],
+input[type="number"],
 input[type="password"]{
   width: 85%;
   padding: 6px;
   margin-bottom: 15px;
   border: 1px solid #ccc;
-  border-radius: 20px;
-  font-size: 20px;
+  border-radius: 0 20px 20px 20px;
+  font-size: 17px;
   background-color: rgb(252, 237, 248);
 }
 input[type="submit"] {
   
-  width: 6em;
+  width: fit-content;
   height: 2em;
   color:rgb(249, 249, 239);
   font-size: large;
@@ -101,65 +212,34 @@ input[type="submit"] {
   right: 10%;
   border-radius: 12px;
   border: 1px solid;
-  background-color: #f4af38;
+  background-color: #e7a22b;
   text-align: center;
-  box-shadow: 3px 3px 3px -1px rgba(10, 99, 169, 0.16),
-              -3px -3px 3px -1px rgba(255, 255, 255, 0.70);
+  box-shadow: 2px 2px 15px rgba(0.3, 0.3, 0.3, 0.3);
 }
 input[type="submit"]:active {
   background-color: #fcd89a;
+  width: fit-content;
 }
 
-.login-layout, .register-layout{
-  padding: 3% 0 25% 10%;
+.login-layout {
+  padding: 0;
   margin: 5% 2% 0 2%;
   background-color:#f6f1f1;
-  border-radius: 7%;
-  box-shadow: 4px 4px 4px -1px rgba(10, 99, 169, 0.16),
-              -4px -4px 4px -1px rgba(255, 255, 255, 0.70);
+  border-radius: 15px;
+  box-shadow: 5px 5px 20px rgba(0.5, 0.5, 0.5, 0.5);
+}
+.login-layout form {
+  padding: 3% 0 25% 10%;
+}
+.login-head {
+  background-color: #ea9c58ef;
+  border-radius: 15px 15px 0 0;
+  text-align: center;
+  padding: 1px 0 1px 0;
+  color: white;
 }
 h5 {
   font-size: 17px;
 }
-.account-layout {
-  font-weight: 500;
-  color: #f6f1f1;
-  padding: 10px 20px 17px 10px;
-  margin: 0 0 0 0;
-  background-color: #165789;
-  box-shadow: 4px 4px 4px -1px rgba(10, 99, 169, 0.16),
-              -4px -4px 4px -1px rgba(255, 255, 255, 0.70);
-} 
-
-.dropdown-input {
-  display: block;
-}
 
 
-.dropdown-button{
-  color: white;
-  /* display: inline-block; */
-  position: absolute;
-  top: 0px;
-  right: 8px;
-  font-size: 28px;
-}
-
-#menu-toggle {
-  z-index: 1;
-  display: none;
-  
-}
-#dropdown-content {
-  display: none;
-  position: absolute;
-  right: 0em;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-  align-items: left;
-  transition: left 2s ease;
-  
-}
-#menu-toggle:checked + .dropdown-button + #dropdown-content {
-  display: block;
-}

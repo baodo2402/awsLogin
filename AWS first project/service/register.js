@@ -6,29 +6,33 @@ const util = require('../utils/util');
 
 const bcrypt = require('bcryptjs');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-const userTable = 'jinmeister-users';
-
-
+const userTable = 'user-info-table';
 
 
 async function register(userInfo) {
     const name = userInfo.name;
     const email = userInfo.email;
     const username = userInfo.username;
+    const phoneNumber = userInfo.phoneNumber;
     const password = userInfo.password;
 
         //check if any field is not filled yet
-    if(!name || !email || !username || !password) {
+    if(!name || !email || !username || !phoneNumber || !password) {
         return util.buildResponse(401, {
             message: 'All fields are required'
         })
     }
-
-    //check whether username is taken or not
-    const dynamoUser = await getUser(username.toLowerCase().trim());
-    if (dynamoUser && dynamoUser.username) {
+    if(password.length <= 8) {
         return util.buildResponse(401, {
-            message: 'username already exists, please choose a different username'
+            message: 'Password must be longer than 8 characters'
+        })
+    }
+    
+    //check whether username is taken or not
+    const dynamoUser = await getUser(email);
+    if (dynamoUser && dynamoUser.email) {
+        return util.buildResponse(401, {
+            message: 'Email already exists'
         })
     }
 
@@ -36,9 +40,10 @@ async function register(userInfo) {
     const encryptedPW = bcrypt.hashSync(password.trim(), 10);
 
     const user = {
-        name: name,
         email: email,
+        name: name,
         username: username.toLowerCase().trim(),
+        phoneNumber: phoneNumber,
         password: encryptedPW
     }
 
@@ -47,14 +52,14 @@ async function register(userInfo) {
     if (!saveUserResponse) {
         return util.buildResponse(503, {message: 'Sever error. Please try again later'});
     }
-    return util.buildResponse(200, {username: username});
+    return util.buildResponse(200, {email: email});
 
     //define 2 methods: getUser and saveUser
-    async function getUser(username) {
+    async function getUser(email) {
         const params = {
             TableName: userTable,
             Key: {
-                username: username
+                email: email
             }
         }
         return await dynamodb.get(params).promise().then(response => {
@@ -64,10 +69,10 @@ async function register(userInfo) {
         })
     }
 
-    async function saveUser(user) {
+    async function saveUser(email) {
         const params = {
             TableName: userTable,
-            Item: user
+            Item: email
         }
         return await dynamodb.put(params).promise().then(() => {
             return true;

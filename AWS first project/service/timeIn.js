@@ -5,12 +5,12 @@ AWS.config.update({
 const util = require('../utils/util');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const uuid = require('uuid');
-
+const tableName = 'user-info-table'
 
 async function shift(userInfo) {
-    const { username, timeIn } = userInfo;
+    const { email, timeIn } = userInfo;
 
-    if (!username || !timeIn) {
+    if (!email || !timeIn) {
         return util.buildResponse(400, {
             message: 'Missing or invalid data'
         });
@@ -19,20 +19,21 @@ async function shift(userInfo) {
     try {
         const dateInSplit = timeIn.split(",");
         const dateIn = dateInSplit[0].trim();
-        const dynamoUser = await getUser(username.toLowerCase().trim());
+        const dynamoUser = await getUser(email);
         const uniqueId = uuid.v4();
-        if (dynamoUser && dynamoUser.username) {
+        if (dynamoUser && dynamoUser.email && dynamoUser.name) {
             await saveUser({
-                username: dynamoUser.username,
+                email: dynamoUser.email,
+                name: dynamoUser.name,
                 timeIn,
                 dateIn: dateIn,
                 id: uniqueId
             });
 
-            await saveUuid(dynamoUser.username, uniqueId);
+            await saveUuid(dynamoUser.email, uniqueId);
 
             return util.buildResponse(200, {
-                username: dynamoUser.username
+                email: dynamoUser.email
             });
         } else {
             return util.buildResponse(404, {
@@ -47,11 +48,11 @@ async function shift(userInfo) {
     }
 }
 
-async function getUser(username) {
+async function getUser(email) {
     const params = {
-        TableName: 'jinmeister-users',
+        TableName: tableName,
         Key: {
-            username: username
+            email: email
         }
     };
 
@@ -78,11 +79,11 @@ async function saveUser(user) {
     }
 }
 
-async function saveUuid(username, uuid) {
+async function saveUuid(email, uuid) {
     const params = {
-        TableName: 'jinmeister-users',
+        TableName: tableName,
         Key: {
-            username: username
+            email: email
         },
         UpdateExpression: 'SET id = :id',
         ExpressionAttributeValues: {

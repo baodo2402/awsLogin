@@ -49,19 +49,44 @@
 .clockin:active, .clockout:active {
   background-color: #ffffff;
 }
-.clockin-clockout {
+.clockin-clockout.active {
+  position: relative;
+  margin-top: 25px;
+  margin-bottom: 0;
+  padding: 0 20px 100% 20px;
+  height: 10px;
+  display: block;
+  text-align: center;
+  background-color:rgba(254, 235, 228, 0.805);
+  border-radius: 15px;
+  max-width: 19em;
+  box-shadow: 3px 3px 7px rgba(0.5, 0.5, 0.5, 0.5);
+  margin: 12px auto;
+  visibility: visible;
+  opacity: 1;
+  transform: scaleY(1);
+  transition: var(--speed) ease;
+  z-index: 3;
+}
+
+
+.clockin-clockout.inactive {
   position: relative;
   margin-top: 25px;
   margin-bottom: 0;
   padding: 0 0 100% 0;
-  height:16em;
+  height: 0;
   display: block;
   text-align: center;
-  background-color:#f6f1f1;
-  border-radius: 7% 7% 0 0;
-  box-shadow: 4px 4px 4px -1px rgba(10, 99, 169, 0.16),
-              -4px -4px 4px -1px rgba(10, 99, 169, 0.16);
-  
+  background-color:#f6f1f1d5;
+  border-radius: 15px;
+  max-width: 23em;
+  margin: 12px auto;
+  visibility: hidden;
+  opacity: 0;
+  transform: scaleY(0);
+  transition: var(--speed) ease;
+  z-index: 0;
 }
   .status {
     position: relative;

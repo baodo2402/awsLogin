@@ -4,27 +4,28 @@ AWS.config.update({
 });
 const util = require('../utils/util');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
+const tableName = 'user-info-table';
 
 async function shiftTracking(event) {
     try {
-        const { username, clockInTime, clockOutTime } = JSON.parse(event.body);
+        const { email, clockInTime, clockOutTime } = JSON.parse(event.body);
 
         // Step 1: Retrieve the username from the 'jinmeister-users' table
         const getUserParams = {
-            TableName: 'jinmeister-users', // Replace with the actual table name
+            TableName: tableName,
             Key: {
-                username: username,
+                email: email
             },
         };
 
         const userResponse = await dynamodb.get(getUserParams).promise();
 
-        if (userResponse.Item && userResponse.Item.username) {
+        if (userResponse.Item && userResponse.Item.email) {
             // Step 2: Store retrievedUsername, timeIn, timeOut to 'shift-tracking' table
             const params = {
                 TableName: 'shift-tracking',
                 Item: {
-                    username: userResponse.Item.username,
+                    email: userResponse.Item.email,
                     clockIn: clockInTime,
                     clockOut: clockOutTime,
                 },

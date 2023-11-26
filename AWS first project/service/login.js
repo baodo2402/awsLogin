@@ -7,23 +7,23 @@ const bcrypt = require('bcryptjs');
 const auth = require('../utils/auth');
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-const userTable = 'jinmeister-users';
+const userTable = 'user-info-table';
 
 
 async function login(user) {
-    const username = user.username;
+    const email = user.email;
     const password = user.password;
 
-    if (!user || !username || !password) {
+    if (!user || !email || !password) {
         return util.buildResponse(401, {
-            message: 'username and password are required'
+            message: 'Email and password are required'
         })
     }
 
     //check whether user exist or not
-    const dynamoUser = await getUser(username.toLowerCase().trim());
-    if (!dynamoUser || !dynamoUser.username) {
-        return util.buildResponse(403, { message: 'user does not exist'});
+    const dynamoUser = await getUser(email);
+    if (!dynamoUser || !dynamoUser.email) {
+        return util.buildResponse(403, { message: 'Email does not exist'});
     }
     //check password match
     if (!bcrypt.compareSync(password, dynamoUser.password)) {
@@ -33,9 +33,10 @@ async function login(user) {
 
 
     const userInfo = {
+        email: dynamoUser.email,
         username: dynamoUser.username,
         name: dynamoUser.name,
-        email: dynamoUser.email
+        phoneNumber: dynamoUser.phoneNumber
     }
 
     const token = auth.generateToken(userInfo);
@@ -52,11 +53,11 @@ async function login(user) {
 
 
 //get user (same in register)
-async function getUser(username) {
+async function getUser(email) {
     const params = {
         TableName: userTable,
         Key: {
-            username: username
+            email: email
         }
     }
     

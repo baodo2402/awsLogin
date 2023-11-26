@@ -1,0 +1,70 @@
+:root {
+    --primary-bg: #242526;
+    --secondary-bg: #fff;
+    --primary-text-color: #555;
+    --secondary-text-color: #cecece;
+    --speed: 400ms;
+}
+.profile-info {
+    margin: 0px auto;
+    margin-top: 50px;
+    margin-bottom: 0;
+    font-size: 22px;
+    font-weight: 500;
+    padding: 0;
+    background-color: white;
+    border-radius: 10px;
+    max-width: 90%;
+    box-shadow: 3px 3px 5px rgba(0.5, 0.5, 0.5, 0.5);
+    z-index: 2;
+
+}
+
+.profile-info h5 {
+  box-shadow: 5px 5px 5px rgba(0.2, 0.2, 0.2, 0.2);
+  font-size: 20px;
+  text-align: center;
+  background-color: rgba(235, 100, 127, 0.2);
+}
+#info-value {
+  text-align: right;
+  justify-content: right;
+  border-bottom: 2px solid #ccc;
+  color: rgb(13, 63, 113);
+  font-weight: 400;
+}
+#profile-content p {
+  margin: 0;
+}
+.password-field.active {
+  margin: 20px;
+    background-color: white;
+    height: 10em;
+    border-radius: 10px;
+    padding: 15px;
+    opacity: 1;
+    visibility: visible;
+    transition: var(--speed) ease;
+    z-index: 1;
+  }
+
+  .password-field.inactive {
+    margin: 20px;
+    background-color: white;
+    height: 0;
+    border-radius: 10px;
+    padding: 15px;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--speed) ease;
+    z-index: 0;
+  }
+
+.trigger-change-info {
+  padding: 0.1px 15px 15px 15px;
+  background-color: white;
+  margin: 15px;
+  border-radius: 10px;
+  height: 25em;
+  box-shadow: 5px 5px 5px rgba(0.2, 0.2, 0.2, 0.2);
+}

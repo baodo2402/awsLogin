@@ -5,24 +5,24 @@ AWS.config.update({
 const util = require('../utils/util');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-
+const tableName = 'user-info-table'
 
 async function timeOut(userInfo) {
-    const { username, timeOut } = userInfo;
+    const { email, timeOut } = userInfo;
 
-    if(!username && !timeOut) {
+    if(!email && !timeOut) {
         return util.buildResponse(400, {
             message: 'Missing or invalid data'
         });
     }
 
     try {
-        const dynamoUser = await getUser(username.toLowerCase().trim());
-        const dynamoId = await getUuid(username.toLowerCase().trim())
-        if(dynamoUser && dynamoUser.username) {
+        const dynamoUser = await getUser(email);
+        const dynamoId = await getUuid(email)
+        if(dynamoUser && dynamoUser.email) {
             await saveTimeOut(dynamoId, timeOut);
             return util.buildResponse(200, {
-                username: dynamoUser.username
+                email: dynamoUser.email
             });
         } else {
             return util.buildResponse(404, {
@@ -38,11 +38,11 @@ async function timeOut(userInfo) {
     }
 }
 
-async function getUser(username) {
+async function getUser(email) {
     const params = {
-        TableName: 'jinmeister-users',
+        TableName: tableName,
         Key: {
-            username: username
+            email: email
         }
     };
 
@@ -55,11 +55,11 @@ async function getUser(username) {
     }
 }
 
-async function getUuid(username) {
+async function getUuid(email) {
     const params = {
-        TableName: 'jinmeister-users',
+        TableName: tableName,
         Key: {
-            username: username
+            email: email
         }
     };
 

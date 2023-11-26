@@ -7,8 +7,8 @@ const csv = require('csv-parser');
 const s3 = new AWS.S3();
 
 const bucketName = 'client-building-addresses';
-const objectKey = 'Lindfield_Job_Control.csv';
 
+//getting tasks from s3 bucket (no status)
 async function getTasks(userInfo) {
     const csvData = [];
     let csvHeaders = [];
@@ -36,7 +36,7 @@ async function getTasks(userInfo) {
     s3Stream
       .pipe(csv({ BOM: true })) // pipe transform the stream of CSV into objects (row -> object)
       .on('data', (row) => {
-        csvHeaders = Object.keys(row);
+        csvHeaders = Object.keys(row)
         if (columnName in row) {
         csvData.push(row[columnName]);
         } else {

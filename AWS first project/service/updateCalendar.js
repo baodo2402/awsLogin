@@ -10,15 +10,14 @@ async function updateCalendar(userInfo) {
     try {
     const tableName = userInfo.tableName;
     const Date = userInfo.Date;
-    const username = userInfo.username;
+    const name = userInfo.name;
     const task = userInfo.task;
-    const status = userInfo.status;
-    const recurrence_pattern = userInfo.recurrence_pattern;
-    const dayOfWeek = userInfo.dayOfWeek;
+    //const status = userInfo.status;
+    //const recurrence_pattern = userInfo.recurrence_pattern;
+    //const dayOfWeek = userInfo.dayOfWeek;
 
         //check if any field is not filled yet
-    if(!Date || !username || !task || status == 'undefined' || status == null || !tableName || 
-        !recurrence_pattern || !dayOfWeek) {
+    if(!Date || !name || !task || !tableName) {
         return util.buildResponse(401, {
             message: 'All fields are required'
         })
@@ -26,11 +25,8 @@ async function updateCalendar(userInfo) {
 
     const user = {
         Date: Date,
-        username: username.toLowerCase().trim(),
-        task: task,
-        status: status,
-        recurrence_pattern: recurrence_pattern,
-        dayOfWeek: dayOfWeek
+        name: name,
+        task: task
     }
 
     //save object to the database
@@ -38,7 +34,7 @@ async function updateCalendar(userInfo) {
     if (!saveUserResponse) {
         return util.buildResponse(503, {message: 'Sever error. Please try again later'});
     }
-    return util.buildResponse(200, {username: username});
+    return util.buildResponse(200, {name: name});
 
     } catch (error) {
         console.error('Error in updateCalendar:', error);

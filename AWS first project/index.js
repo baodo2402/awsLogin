@@ -11,6 +11,11 @@ const getUserProfileService = require("./service/getUserProfile");
 const updateCalendarService = require("./service/updateCalendar");
 const getTaskService = require("./service/getTask");
 const getTasksService = require("./service/getTasks");
+const getTaskStatusService = require("./service/getTaskStatus");
+const sendPasswordEmailService = require("./service/sendPasswordEmail");
+const setYearArrayService = require("./service/setYearArray")
+const compareCodeService = require("./service/compareCode");
+const resetPasswordService = require("./service/resetPassword");
 
 const util = require('./utils/util');
 
@@ -26,6 +31,11 @@ const changeInfoPath = '/changeinfo';
 const calendarPath = '/calendar';
 const getTaskPath = '/gettask';
 const getTasksPath = '/gettasks';
+const getTaskStatusPath = '/gettaskstatus';
+const sendPasswordEmailPath = '/sendemail';
+const setYearArrayPath = '/setyear'
+const compareCodePath = '/comparecode';
+const resetPasswordPath = '/resetpassword'
 
 exports.handler = async (event) => {
   console.log('Request Event: ', event);
@@ -81,6 +91,26 @@ exports.handler = async (event) => {
     case event.httpMethod === 'POST' && event.path === getTasksPath:
       const getTasksBody = JSON.parse(event.body);
       response = await getTasksService.getTasks(getTasksBody);
+      break;
+    case event.httpMethod === 'POST' && event.path === getTaskStatusPath:
+      const getTaskStatusBody = JSON.parse(event.body);
+      response = await getTaskStatusService.getTaskStatus(getTaskStatusBody);
+      break;
+    case event.httpMethod === 'POST' && event.path === sendPasswordEmailPath:
+      const sendPasswordEmailBody = JSON.parse(event.body);
+      response = await sendPasswordEmailService.sendPasswordEmail(sendPasswordEmailBody);
+      break;
+    case event.httpMethod === 'POST' && event.path === setYearArrayPath:
+      const setYearArrayBody = JSON.parse(event.body);
+      response = await setYearArrayService.setYearArray(setYearArrayBody);
+      break;
+    case event.httpMethod === 'POST' && event.path === compareCodePath:
+      const compareCodeBody = JSON.parse(event.body);
+      response = await compareCodeService.compareCode(compareCodeBody);
+      break;
+    case event.httpMethod === 'POST' && event.path === resetPasswordPath:
+      const resetPasswordBody = JSON.parse(event.body);
+      response = await resetPasswordService.resetPassword(resetPasswordBody);
       break;
     default:
       response = await util.buildResponse(404, "404 Not Found");

@@ -1,0 +1,42 @@
+.search-title {
+    text-align: center;
+    margin-top: 15%;
+}
+
+.search-container {
+    display: flex;
+    flex-direction: column;
+    width: 20em;
+    text-align: center;
+    background-color: white;
+    margin: 0 auto;
+    border-radius: 15px;
+    position: relative;
+    box-shadow: 3px 3px 2px rgba(0.3, 0.3, 0.3, 0.3);
+}
+.search-content {
+    display: inline-block;
+
+}
+#list {
+    max-height: 17em;
+    overflow-y: scroll;
+}
+.search-content li {
+    border-bottom: 0.5px ridge #c1d7e4;
+    margin: 8px 30px 8px 30px;
+    list-style-type: none;
+    text-align: left;
+}
+#search-bar {
+    border: none;
+    width: 15em;
+    height: 2.2em;
+    margin: 5px auto;
+    margin-left: 20px;
+    margin-right: 20px;
+    font-size: 15px;
+}
+#search-icon {
+    margin-right: 10px;
+}

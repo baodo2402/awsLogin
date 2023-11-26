@@ -7,16 +7,17 @@ const bcrypt = require('bcryptjs');
 const auth = require('../utils/auth');
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-const userTable = 'jinmeister-users';
+const userTable = 'user-info-table';
 
 async function changeInfo(userInfo) {
     const newName = userInfo.newName;
-    const newEmail = userInfo.newEmail;
-    //const newUsername = userInfo.newUsername;
+    const newUsername = userInfo.newUsername;
+    const newPhoneNumber = userInfo.newPhoneNumber;
     const newPassword = userInfo.newPassword;
-    const username = userInfo.username;
+    //const username = userInfo.username;
+    const email = userInfo.email;
 
-    if(!newName || !newEmail || !username || !newPassword) {
+    if(!newName || !newUsername || !newPhoneNumber || !newPassword) {
         return util.buildResponse(401, {
             message: 'All fields are required'
         })
@@ -25,12 +26,12 @@ async function changeInfo(userInfo) {
     try {
         //encrypt the password
         const newEncryptedPW = bcrypt.hashSync(newPassword.trim(), 10);
-        const dynamoUser = await getUser(username.toLowerCase().trim());
+        const dynamoUser = await getUser(email);
         
-        if (dynamoUser && dynamoUser.username) {
-            await saveUser(newName, newEmail, newEncryptedPW, dynamoUser.username);
+        if (dynamoUser && dynamoUser.email) {
+            await saveUser(newName, newUsername, newPhoneNumber, newEncryptedPW, dynamoUser.email);
             return util.buildResponse(200, {
-                username: dynamoUser.username
+                email: dynamoUser.email
             });
         } else {
             return util.buildResponse(404, {
@@ -47,11 +48,11 @@ async function changeInfo(userInfo) {
 
 }
 
-async function getUser(username) {
+async function getUser(email) {
     const params = {
         TableName: userTable,
         Key: {
-            username: username
+            email: email
         }
     };
 
@@ -64,23 +65,23 @@ async function getUser(username) {
     }
 }
 
-async function saveUser(newName, newEmail, newPassword, username ) {
+async function saveUser(newName, newUsername, newPhoneNumber, newPassword, email ) {
     const params = {
         TableName: userTable,
         Key: {
-            username: username
+            email: email
         },
-        UpdateExpression: 'SET #name = :name, #email = :email, #password = :password',
+        UpdateExpression: 'SET #name = :name, #username = :username, #phoneNumber = :phoneNumber, #password = :password',
         ExpressionAttributeNames: {
             '#name': 'name',
-            '#email': 'email',
-            //'#username': 'username',
+            '#username': 'username',
+            '#phoneNumber': 'phoneNumber',
             '#password': 'password'
         },
         ExpressionAttributeValues: {
             ':name': newName,
-            ':email': newEmail,
-            //':username': newUsername,
+            ':username': newUsername,
+            ':phoneNumber': newPhoneNumber,
             ':password': newPassword
         }
     };
