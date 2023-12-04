@@ -192,7 +192,7 @@ export default function LocationFinder() {
           <button className='clockout' onClick={handleClockout}>Clock-out</button>
           {loading && (
                 <Box sx={{ position: "fixed", top: "40%", left: "45%", zIndex: "1000" }}>
-                <CircularProgress />
+                  <CircularProgress />
                 </Box>
             )}
           <p className="status">{status}</p>

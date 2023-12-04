@@ -39,7 +39,7 @@ const PremiumContent = (props) => {
     }
     const canlendarHandler = () => {
         const userEmail = user && user ? user.email : '';
-        if (userEmail === 'cleanntidy.au@outlook.com' || userEmail === 'thienbao1084@gmail.com' || userEmail === 'danghung0224@gmail.com') {
+        if (userEmail === 'cleanntidy.au@outlook.com' || userEmail === 'thienbao1084@gmail.com' || userEmail === 'danghung0224@gmail.com' || userEmail === 'test2@gmail.com') {
             navigate('/calendarsearching');
         } else {
             navigate('/calendar');

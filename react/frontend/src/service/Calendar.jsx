@@ -12,11 +12,14 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { getUser } from '../service/AuthService';
 import { jobTableNameFunction } from './LocationFinderService';
 import { Header } from '../Header';
+import './CalendarStyle.css';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 var weekOfYear = require('dayjs/plugin/weekOfYear')
 dayjs.extend(weekOfYear);
 
-const startingDate = '2023-09-26'
+const startingDate = '2023-09-25'
 
 const getTasksUrl = 'https://lyg1apc3wl.execute-api.ap-southeast-2.amazonaws.com/prod/gettasks';
 const getTaskStatusUrl = 'https://lyg1apc3wl.execute-api.ap-southeast-2.amazonaws.com/prod/gettaskstatus';
@@ -111,6 +114,8 @@ const getTasks = async (dayOfWeek, recurrence_pattern, suburb) => {
       .then((response) => {
           const task = response.data;
           resolve(task); // Resolve the promise with the data
+          console.log("task: ");
+          console.log(task)
       })
       .catch((error) => {
         console.error(error);
@@ -172,6 +177,7 @@ function ServerDay(props) {
 
 // }
 console.log(jobTableNameFunction())
+
 export default function DateCalendarServerRequest() {
   const location = useLocation();
   const currentPathname = location.pathname;
@@ -183,12 +189,14 @@ export default function DateCalendarServerRequest() {
   const requestAbortController = React.useRef(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const [highlightedDays, setHighlightedDays] = React.useState();
-  // const [jobControlTableName, setJobControlTableName] = useState('');
   const jobControlTableName = localStorage.getItem('jobControlTableName');
-  //console.log(jobControlTableName)
-  
-  //const jobControlTableName = 'Lower_Wycombe_Road_Neutral_Bay';
+
   const [selectedDate, setSelectedDate] = useState(dayjs());
+
+  const [weeklyHeaderPosition, setWeeklyHeaderPosition] = useState();
+  const [evenFortnightlyHeaderPosition, setEvenFortnightlyHeaderPosition] = useState();
+  const [oddFortnightlyHeaderPosition, setOddFortnightlyHeaderPosition] = useState();
+  const [monthlyHeaderPosition, setMonthlyHeaderPosition] = useState();
 
   const fetchHighlightedDays = (date) => {
     const controller = new AbortController();
@@ -230,6 +238,7 @@ export default function DateCalendarServerRequest() {
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
+    console.log(selectedDate)
   };
 
 
@@ -285,7 +294,8 @@ useEffect(() => {
   const [csvHeaderOrder, setCsvHeaderOrder] = useState('');
 
   const [weeklyTask, setWeeklyTask] = useState(null);
-  const [fortnightlyTask, setFortnightlyTask] = useState([]);
+  const [evenFortnightlyTask, setEvenFortnightlyTask] = useState([]);
+  const [oddFortnightlyTask, setOddFortnightlyTask] = useState([]);
   const [monthlyTask, setMonthlyTask] = useState([]);
 
   async function GetTaskStatus(date) {
@@ -306,7 +316,16 @@ useEffect(() => {
       //console.log(getData)
       setIsTaskAndStatusReady(true);
 
-    } else if(date?.includes('Fortnightly')) {
+    } else if(date?.includes('EvenFortnightly')) {
+      const response = await axios.post(getTaskStatusUrl, requestBody, requestConfig);
+      const getData = await response.data;
+      setFortnightlyTaskAndStatus(getData);
+      fortnightlyStatus = getData;
+      //console.log('fortnightly:')
+      //console.log(getData)
+      setIsTaskAndStatusReady(true);
+
+    } else if(date?.includes('OddFortnightly')) {
       const response = await axios.post(getTaskStatusUrl, requestBody, requestConfig);
       const getData = await response.data;
       setFortnightlyTaskAndStatus(getData);
@@ -335,92 +354,213 @@ useEffect(() => {
     }
   }
   async function getTasksForSelectedDate(date) {
+    setWeeklyTaskAndStatus({});
+    setMonthlyTaskAndStatus({});
+    setFortnightlyTaskAndStatus({});
+    
     let weekNumber = 2;
     let taskBody;
     let task;
-    const weekDifference = selectedDate.diff(startingDate, 'week');
-    //const dayFormat = selectedDate.format('DD');
-    
-    // console.log("starting date is " + weekDifference)
-    // console.log("selected date is " + selectedDate)
-    // console.log('day format ' + dayFormat)
+    const lastIndexHeader = csvHeaders.length - 1;
+    const startingDate = csvHeaders[lastIndexHeader]?.split('"').join('');
 
-    //ADD THIS IF STATEMENT LATER!!!
+    const weekDifference = selectedDate.diff(startingDate, 'week');
+    console.log('selected day: ' + selectedDate)
+
     if(jobControlTableName !== null || jobControlTableName || jobControlTableName !== '') {
         //if (date === 'Tuesday' && weekDifference % 2 === 0)
         
         if (csvHeaders.length > 0) {
-//calculate monthly (once 4 weeks)
-      if ((csvHeaders[2]?.includes(date) && weekDifference % 4 === 0) ||
-          (csvHeaders[2]?.includes(dayjs().format('dddd')) && weekDifference % 4 === 0)) {
-        try {
-          //setTaskAndStatus({});
-          const statusDate = selectedDate.format('YYYY-MM-DD') + '-' + csvHeaders[2]
-          setCsvHeaderOrder(date);
-          taskBody = await getTasks(date, 'Monthly', jobControlTableName)
-          task = taskBody.csvData.filter(item => item !== "");
-          setMonthlyTask({ task });
-          GetTaskStatus(statusDate);
-          //console.log(task);
-        } catch (error) {
-            console.error(error);
-        }
-      } else {
-        setMonthlyTask(null);
-        setCsvHeaderOrder(null);
-      }
 
-//calculate fortnightly only
-        if ((csvHeaders[1]?.includes(date) && weekDifference % 2 === 0) ||
-            (csvHeaders[1]?.includes(dayjs().format('dddd')) && weekDifference % 2 === 0)) {
-          try {
-            //setTaskAndStatus({});
-            const statusDate = selectedDate.format('YYYY-MM-DD') + '-' + csvHeaders[1]
-            setCsvHeaderOrder(date);
-            taskBody = await getTasks(date, 'Fortnightly', jobControlTableName)
-            task = taskBody.csvData.filter(item => item !== "");
-            setFortnightlyTask({ task });
-            GetTaskStatus(statusDate)
-            //console.log(task);
-          } catch (error) {
-              console.error(error);
+//calculate monthly (once 4 weeks)
+          // for (let i = 14; i <= 20; i++) {
+            for (let i = 0; i<= csvHeaders.length; i++) {
+            if((csvHeaders[i]?.includes(date) && csvHeaders[i]?.includes('Monthly') && weekDifference % 4 === 0)) {
+              console.log('monthly met');
+              try {
+                //setTaskAndStatus({});
+                const statusDate = selectedDate.format('YYYY-MM-DD') + '-' + csvHeaders[i]
+                setCsvHeaderOrder(date);
+                taskBody = await getTasks(date, 'Monthly', jobControlTableName)
+                task = taskBody.csvData.filter(item => item !== "");
+                setMonthlyTask({ task });
+                GetTaskStatus(statusDate);
+                setMonthlyHeaderPosition(i);
+                console.log(task);
+                break;
+              } catch (error) {
+                  console.error(error);
+              }
+            } else {
+              setMonthlyTask(null);
+              setCsvHeaderOrder(null);
+              setMonthlyHeaderPosition(null);
+            }
           }
-        } else {
-          setFortnightlyTask(null);
-          setCsvHeaderOrder(null)
-        }
+      // if ((csvHeaders[2]?.includes(date) && weekDifference % 4 === 0) ||
+      //     (csvHeaders[2]?.includes(dayjs().format('dddd')) && weekDifference % 4 === 0)) {
+      //   try {
+      //     //setTaskAndStatus({});
+      //     const statusDate = selectedDate.format('YYYY-MM-DD') + '-' + csvHeaders[2]
+      //     setCsvHeaderOrder(date);
+      //     taskBody = await getTasks(date, 'Monthly', jobControlTableName)
+      //     task = taskBody.csvData.filter(item => item !== "");
+      //     setMonthlyTask({ task });
+      //     GetTaskStatus(statusDate);
+      //     console.log(task);
+      //   } catch (error) {
+      //       console.error(error);
+      //   }
+      // } else {
+      //   setMonthlyTask(null);
+      //   setCsvHeaderOrder(null);
+      // }
+
+//calculate fortnightly (even)
+          // for (let i = 7; i <=13; i++) {
+            for (let i = 0; i <= csvHeaders.length; i++) {
+            if ((csvHeaders[i]?.includes(date) && csvHeaders[i]?.includes('EvenFortnightly') && weekDifference % 2 === 0)) {
+              
+              try {
+                //setTaskAndStatus({});
+                const statusDate = selectedDate.format('YYYY-MM-DD') + '-' + csvHeaders[i]
+                setCsvHeaderOrder(date);
+                taskBody = await getTasks(date, 'EvenFortnightly', jobControlTableName)
+                task = taskBody.csvData.filter(item => item !== "");
+                setEvenFortnightlyTask({ task });
+                GetTaskStatus(statusDate)
+                setEvenFortnightlyHeaderPosition(i);
+                
+                console.log(task);
+                console.log('even fortnightly met')
+              } catch (error) {
+                  console.error(error);
+              }
+              break;
+            } else {
+              setEvenFortnightlyTask(null);
+              setCsvHeaderOrder(null);
+              setEvenFortnightlyHeaderPosition(null);
+            }
+          }
+
+//calculate fortnightly (odd)
+          // for (let i = 7; i <=13; i++) {
+            for (let i = 0; i <= csvHeaders.length; i++) {
+              if ((csvHeaders[i]?.includes(date) && csvHeaders[i]?.includes('OddFortnightly') && weekDifference % 2 !== 0)) {
+                
+                try {
+                  //setTaskAndStatus({});
+                  const statusDate = selectedDate.format('YYYY-MM-DD') + '-' + csvHeaders[i]
+                  setCsvHeaderOrder(date);
+                  taskBody = await getTasks(date, 'OddFortnightly', jobControlTableName)
+                  task = taskBody.csvData.filter(item => item !== "");
+                  setOddFortnightlyTask({ task });
+                  GetTaskStatus(statusDate)
+                  setOddFortnightlyHeaderPosition(i);
+                  console.log(task);
+                  console.log('odd fortnightly met')
+                } catch (error) {
+                    console.error(error);
+                }
+                break;
+              } else {
+                setOddFortnightlyTask([]);
+                setCsvHeaderOrder(null)
+                setOddFortnightlyHeaderPosition(null)
+              }
+            }
+
+        // if ((csvHeaders[1]?.includes(date) && weekDifference % 2 === 0) ||
+        //     (csvHeaders[1]?.includes(dayjs().format('dddd')) && weekDifference % 2 === 0)) {
+        //   try {
+        //     //setTaskAndStatus({});
+        //     const statusDate = selectedDate.format('YYYY-MM-DD') + '-' + csvHeaders[1]
+        //     setCsvHeaderOrder(date);
+        //     taskBody = await getTasks(date, 'Fortnightly', jobControlTableName)
+        //     task = taskBody.csvData.filter(item => item !== "");
+        //     setFortnightlyTask({ task });
+        //     GetTaskStatus(statusDate)
+        //     console.log(task);
+        //   } catch (error) {
+        //       console.error(error);
+        //   }
+        // } else {
+        //   setFortnightlyTask(null);
+        //   setCsvHeaderOrder(null)
+        // }
 
 //calculate weekly  
-        if ((csvHeaders[0]?.includes(date)) ||
-            (csvHeaders[0]?.includes(dayjs().format('dddd'))) ) {
-          try {
-            //setTaskAndStatus({});
-            const statusDate = selectedDate.format('YYYY-MM-DD') + '-' + csvHeaders[0];
-            setCsvHeaderOrder(date);
-            taskBody = await getTasks(date, 'Weekly', jobControlTableName)
-            task = taskBody.csvData.filter(item => item !== "");
-            setWeeklyTask({ task });
-            GetTaskStatus(statusDate)
-            task = null;
-            //console.log(task);
-          } catch (error) {
-              console.error(error);
+          // for(let i = 0; i <=6; i++) {
+            for (let i = 0; i <= csvHeaders.length; i++) { 
+            if((csvHeaders[i]?.includes(date) && csvHeaders[i]?.includes('Weekly'))) {
+                  console.log('weekly met')
+                  try {
+                    //setTaskAndStatus({});
+                    const statusDate = selectedDate.format('YYYY-MM-DD') + '-' + csvHeaders[i];
+                    setCsvHeaderOrder(date);
+                    taskBody = await getTasks(date, 'Weekly', jobControlTableName)
+                    task = taskBody.csvData.filter(item => item !== "");
+                    setWeeklyTask({ task });
+                    GetTaskStatus(statusDate)
+                    setWeeklyHeaderPosition(i);
+                    // task = null;
+                    console.log(task);
+                    
+                  } catch (error) {
+                      console.error(error);
+                  }
+                  break;
+                } else {
+                  setWeeklyTask(null);
+                  setCsvHeaderOrder(null);
+                  setWeeklyHeaderPosition(null);
+                  //setTaskAndStatus({});
+                  // setFortnightlyTask(null);
+                }
           }
-        } else {
-          setWeeklyTask(null);
-          setCsvHeaderOrder(null)
-          //setTaskAndStatus({});
-          setFortnightlyTask(null);
-        }
+          
+        // if ((csvHeaders[0]?.includes(date)) ||
+        //     (csvHeaders[0]?.includes(dayjs().format('dddd'))) ) {
+        //   try {
+        //     //setTaskAndStatus({});
+        //     const statusDate = selectedDate.format('YYYY-MM-DD') + '-' + csvHeaders[0];
+        //     setCsvHeaderOrder(date);
+        //     taskBody = await getTasks(date, 'Weekly', jobControlTableName)
+        //     task = taskBody.csvData.filter(item => item !== "");
+        //     setWeeklyTask({ task });
+        //     GetTaskStatus(statusDate)
+        //     // task = null;
+        //     console.log(task);
+            
+        //   } catch (error) {
+        //       console.error(error);
+        //   }
+        // } else {
+        //   setWeeklyTask(null);
+        //   setCsvHeaderOrder(null)
+        //   //setTaskAndStatus({});
+        //   setFortnightlyTask(null);
+        // }
 
-
-        if(!csvHeaders[0]?.includes(date) || !csvHeaders[1]?.includes(date) || !csvHeaders[2]?.includes(date)) {
-          setCsvHeaderOrder(null);
-          //setTaskAndStatus({})
-          setWeeklyTask(null);
-          setFortnightlyTask(null);
-          setMonthlyTask(null);
-        }
+          // for (let i=0; i <=csvHeaders.length; i++) {
+          //   if (!csvHeaders[i]?.includes(date)) {
+          //     setCsvHeaderOrder(null);
+          //     //setTaskAndStatus({})
+          //     setWeeklyTask(null);
+          //     setEvenFortnightlyTask(null);
+          //     setOddFortnightlyTask(null);
+          //     setMonthlyTask(null);
+          //   }
+          // }
+        // if(!csvHeaders[0]?.includes(date) || !csvHeaders[1]?.includes(date) || !csvHeaders[2]?.includes(date)) {
+        //   setCsvHeaderOrder(null);
+        //   //setTaskAndStatus({})
+        //   setWeeklyTask(null);
+        //   setFortnightlyTask(null);
+        //   setMonthlyTask(null);
+        //   console.log('error getting tasks or no tasks')
+        // }  
 
         // Increment the week number after each Sunday
         if (date === 0) {
@@ -439,9 +579,6 @@ useEffect(() => {
     getTasksForSelectedDate(selectedDate?.format('dddd'));
     //console.log(selectedDate.format('dddd'))
   }, [selectedDate, csvHeaders]);
-
-
-
 
   // React.useEffect(() => {
   //   GetTaskStatus().then(() => {
@@ -476,7 +613,7 @@ useEffect(() => {
       console.log(jobControlTableName)
       const requestBody = {
         tableName: jobControlTableName,
-        Date: selectedDate.format('YYYY-MM-DD') + '-' + csvHeaders[0],//csvHeaderOrder,
+        Date: selectedDate.format('YYYY-MM-DD') + '-' + csvHeaders[weeklyHeaderPosition],//csvHeaderOrder,
         name: name,
         task: updatedTaskAndStatus
       };
@@ -505,10 +642,10 @@ useEffect(() => {
     const name = user !== 'undefined' && user ? user.name : '';
     const underscoredName = name?.split(' ').join('_');
 
-    if (fortnightlyTask && isTaskAndStatusReady && (jobControlTableName !== null || jobControlTableName || jobControlTableName !== '')) {
+    if ((evenFortnightlyTask || oddFortnightlyTask) && isTaskAndStatusReady && (jobControlTableName !== null || jobControlTableName || jobControlTableName !== '')) {
       const updatedTaskAndStatus = { ...fortnightlyTaskAndStatus };
   
-      fortnightlyTask.task.forEach((task, index) => {
+      (evenFortnightlyTask?.task || oddFortnightlyTask?.task).forEach((task, index) => {
         const checkboxId = `task-${task}`;
         const checkbox = document.getElementById(checkboxId);
   
@@ -522,7 +659,7 @@ useEffect(() => {
       
       const requestBody = {
         tableName: jobControlTableName,
-        Date: selectedDate.format('YYYY-MM-DD') + '-' + csvHeaders[1],//csvHeaderOrder,
+        Date: selectedDate.format('YYYY-MM-DD') + '-' + csvHeaders[evenFortnightlyHeaderPosition ?? oddFortnightlyHeaderPosition],//csvHeaderOrder,
         name: name,
         task: updatedTaskAndStatus
       };
@@ -545,6 +682,7 @@ useEffect(() => {
     }
     alert("tasks submitted")
   };
+  
 
   const submitMonthlyTasks = () => {
     const user = getUser();
@@ -568,7 +706,7 @@ useEffect(() => {
       console.log(csvHeaderOrder)
       const requestBody = {
         tableName: jobControlTableName,
-        Date: selectedDate.format('YYYY-MM-DD') + '-' + csvHeaders[2],//csvHeaderOrder,
+        Date: selectedDate.format('YYYY-MM-DD') + '-' + csvHeaders[monthlyHeaderPosition],//csvHeaderOrder,
         name: name,
         task: updatedTaskAndStatus
       };
@@ -592,38 +730,41 @@ useEffect(() => {
     alert("tasks submitted")
   };
   
-  const listWeeklyTasks = weeklyTask?.task && isTaskAndStatusReady ? (
-    weeklyTask.task.map((task, index) => {
-      const checkboxId = `task-${task}`;
-      const isChecked = weeklyTaskAndStatus[task];
-  
-      const handleCheckboxChange = () => {
-        // Update taskAndStatus map when the checkbox is changed
-        const updatedTaskAndStatus = { ...weeklyTaskAndStatus };
-        updatedTaskAndStatus[task] = !isChecked;
-        // Set the updated map to your state
-        setWeeklyTaskAndStatus(updatedTaskAndStatus);
-      };
-  
-      return (
-        <li key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <label htmlFor={checkboxId} style={{ flex: 1 }}>{task}</label>
-          <input
-            type="checkbox"
-            id={checkboxId}
-            checked={isChecked}
-            onChange={handleCheckboxChange}
-            style={{ width: '20px', height: '20px', marginLeft: '10px' }}
-          />
-        </li>
-      );
+  const listWeeklyTasks = weeklyTask?.task /*&& isTaskAndStatusReady */ ? (
+      weeklyTask?.task?.map((task, index) => {
+        const checkboxId = `task-${task}`;
+        const isChecked = weeklyTaskAndStatus[task];
+    
+        const handleCheckboxChange = () => {
+          // Update taskAndStatus map when the checkbox is changed
+          const updatedTaskAndStatus = { ...weeklyTaskAndStatus };
+          updatedTaskAndStatus[task] = !isChecked;
+          // Set the updated map to your state
+          setWeeklyTaskAndStatus(updatedTaskAndStatus);
+        };
+      
+        return (
+          <div>
+            <li key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <label htmlFor={checkboxId} style={{ flex: 1 }}>{task}</label>
+            <input
+              type="checkbox"
+              id={checkboxId}
+              checked={isChecked}
+              onChange={handleCheckboxChange}
+              style={{ width: '20px', height: '20px', marginLeft: '10px' }}
+            />
+          </li>
+          </div>
+          
+        )
     })
   ) : (
     <li>No Weekly Tasks Today</li>
   );
   
-  const listFortnightlyTasks = fortnightlyTask?.task && isTaskAndStatusReady ? (
-    fortnightlyTask.task.map((task, index) => {
+  const listFortnightlyTasks = (evenFortnightlyTask?.task || oddFortnightlyTask?.task) /*&& isTaskAndStatusReady */ ? (
+    (evenFortnightlyTask?.task || oddFortnightlyTask?.task).map((task, index) => {
       const checkboxId = `task-${task}`;
       const isChecked = fortnightlyTaskAndStatus[task];
   
@@ -652,7 +793,7 @@ useEffect(() => {
     <li>No Fortnightly Tasks Today</li>
   );
 
-  const listMonthlyTasks = monthlyTask?.task && isTaskAndStatusReady ? (
+  const listMonthlyTasks = monthlyTask?.task /*&& isTaskAndStatusReady */ ? (
     monthlyTask.task.map((task, index) => {
       const checkboxId = `task-${task}`;
       const isChecked = monthlyTaskAndStatus[task];
@@ -682,10 +823,12 @@ useEffect(() => {
     <li>No Monthly Tasks Today</li>
   );
 
+
   const navigate = useNavigate();
   const accountHandler = () => {
     navigate('/premium-content');
 }
+  const [expand, setExpand] = useState(false);
 
   return (
     // <div>
@@ -710,7 +853,8 @@ useEffect(() => {
           style={{
             margin: "10px auto",
             marginTop: '2em',
-            boxShadow: "5px 5px 20px rgba(0.5, 0.5, 0.5, 0.5)"
+            boxShadow: "5px 5px 20px rgba(0.5, 0.5, 0.5, 0.5)",
+            zIndex: "-1"
             
           }}
           slotProps={{
@@ -719,22 +863,61 @@ useEffect(() => {
             },
           }}
         />
-        <div style={{ padding: "10px", margin: "5px auto",
-                      backgroundColor: "white", borderRadius: "5px",
-                      maxWidth: "18.6em", boxShadow: "5px 5px 20px rgba(0.5, 0.5, 0.5, 0.5)",
-                      height: "300px", overflowY: "auto" }}>
-              <h4>{jobControlTableName} <br />Working Schedule:</h4>
+        
+        <div className={`task-field ${expand ? 'active' : 'inactive'}`} >
+
+                <section className='task-header' style={{display: 'flex', position: "absolute"}}>
+                  <button id='expand-button' onClick={() => setExpand(!expand)}>
+                    {expand ? 'Collapse' : 'Expand'}
+                  </button>
+                </section>
+                <h4>{jobControlTableName} <br />Working Schedule:</h4>
               <p>{selectedDate.format('dddd')}</p>
                 <ul>
                   <p style={{ fontWeight: "700"}}>Weekly tasks:</p>
+                  {weeklyTask?.task && (
+                    <>
+                      {weeklyTask?.task.some(item => item.includes('General Waste')) && '🔴'}
+                      {weeklyTask?.task.some(item => item.includes('Recycling')) && '🟡'}
+                      {weeklyTask?.task.some(item => item.includes('FOGO')) && '🟢'}
+
+                    </>
+                  )}
+
+
                   {listWeeklyTasks}
                   <button style={{ position: 'relative', left:'15em', height: '2.5em' }} onClick={submitWeeklyTasks} >Submit</button>
 
                   <p style={{ fontWeight: "700"}}>Fortnightly tasks:</p>
+                  {evenFortnightlyTask?.task && (
+                    <>
+                      {evenFortnightlyTask?.task.some(item => item.includes('General Waste')) && '🔴'}
+                      {evenFortnightlyTask?.task.some(item => item.includes('Recycling')) && '🟡'}
+                      {evenFortnightlyTask?.task.some(item => item.includes('FOGO')) && '🟢'}
+                    </>
+                  )}
+                    
+                  {oddFortnightlyTask?.task && (
+                    <>
+                      {oddFortnightlyTask?.task.some(item => item.includes('General Waste')) && '🔴'}
+                      {oddFortnightlyTask?.task.some(item => item.includes('Recycling')) && '🟡'}
+                      {oddFortnightlyTask?.task.some(item => item.includes('FOGO')) && '🟢'}
+                    </>
+                  )}
+
                   {listFortnightlyTasks}
                   <button style={{ position: 'relative', left:'15em', height: '2.5em' }} onClick={submitFortnightlyTasks} >Submit</button>
 
                   <p style={{ fontWeight: "700"}}>Monthly tasks:</p>
+                  {monthlyTask?.task && (
+                    <>
+                      {monthlyTask?.task.some(item => item.includes('General Waste')) && '🔴'}
+                      {monthlyTask?.task.some(item => item.includes('Recycling')) && '🟡'}
+                      {monthlyTask?.task.some(item => item.includes('FOGO')) && '🟢'}
+                    </>
+                  )}
+
+
                   {listMonthlyTasks}
                   <button style={{ position: 'relative', left:'15em', height: '2.5em' }}onClick={submitMonthlyTasks} >Submit</button>
                 </ul>

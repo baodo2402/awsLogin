@@ -64,7 +64,6 @@ export default function SearchBar() {
         // Set localStorage with both suburb and formatted street
         window.localStorage.setItem('jobControlTableName', street + '_' + suburb);
         console.log("from search bar: " + street + '_' + suburb)
-        // Navigate to another page (replace 'your-other-page' with the actual path)
         navigate('/calendar');
     }
 

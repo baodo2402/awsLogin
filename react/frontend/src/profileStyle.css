@@ -9,7 +9,7 @@
     margin: 0px auto;
     margin-top: 50px;
     margin-bottom: 0;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 500;
     padding: 0;
     background-color: white;
@@ -22,9 +22,10 @@
 
 .profile-info h5 {
   box-shadow: 5px 5px 5px rgba(0.2, 0.2, 0.2, 0.2);
-  font-size: 20px;
+  font-size: 18px;
   text-align: center;
   background-color: rgba(235, 100, 127, 0.2);
+  padding: 5px;
 }
 #info-value {
   text-align: right;
@@ -32,7 +33,9 @@
   border-bottom: 2px solid #ccc;
   color: rgb(13, 63, 113);
   font-weight: 400;
+  font-size: 18px;
 }
+
 #profile-content p {
   margin: 0;
 }

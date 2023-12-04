@@ -14,7 +14,7 @@ html, body {
   color: #040404;
   padding: 10px 20px 17px 10px;
   margin: 0 0 0 0;
-  background-color: rgba(245, 187, 126, 0.919);
+  background-color: rgba(229, 163, 93, 0.884);
   box-shadow: 4px 4px 4px -1px rgba(10, 99, 169, 0.16),
               -4px -4px 4px -1px rgba(255, 255, 255, 0.70);
   z-index: 3;
@@ -30,7 +30,7 @@ html, body {
   background-repeat: no-repeat;
   min-height: 100%;
   min-width: 100%;
-  border-radius: 15vw 0 0 0;
+  border-radius: 5pc 0 0 0;
   z-index: -1;
   overflow-x: hidden;
   overflow-y: hidden;
