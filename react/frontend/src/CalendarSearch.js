@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SearchBar from "./SearchBar";
 import { Header } from "./Header";
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import './service/CalendarStyle.css'
+import './service/CalendarStyle.css';
+import { useLocation } from "react-router-dom";
+import { getUser } from './service/AuthService';
+import ColumTaskBar from "./ColumnTaskBar";
+import { BsDisplay } from "react-icons/bs";
+import AccessInformation from "./service/AccessInformation";
+
+const { addressUrl } = AccessInformation
 
 const dayjs = require('dayjs');
 
@@ -19,12 +26,23 @@ const test = () => {
 
 
 export default function CalendarSearching() {
-    const [startDate, setStartDate] = useState('');
-    const [inputDate, setInputDate] = useState('');
+    const [isAdmin, setIsAdmin] = useState(false);
+    const location = useLocation();
+    const suburb = window.localStorage.getItem('suburb')
 
     const [selectedDate, setSelectedDate] = useState(null);
     const [startingDate, setStartingDate] = useState('');
     const weekDifferences = selectedDate ? selectedDate.diff(startingDate, 'week') : null;
+
+
+    useEffect(() => {
+        const user = getUser();
+        const userEmail = user && user ? user.email : '';
+        if (userEmail === 'cleanntidy.au@outlook.com' || userEmail === 'thienbao1084@gmail.com' || userEmail === 'test2@gmail.com') {
+            setIsAdmin(true);
+        }
+    }, [])
+    
 
     const handleStartingDateChange = (date) => {
         setStartingDate(date);
@@ -45,49 +63,68 @@ export default function CalendarSearching() {
     return (
         <div>
             <Header title="Calendar Search" />
-            <SearchBar />
+            <ColumTaskBar columnDisplay='none' />
 
-            <div className="date-picker-container">
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={['DatePicker']}>
-                <DatePicker
-                    label="Set Starting Date (Monday only)"
-                    value={startingDate}
-                    onChange={handleStartingDateChange}
-                    renderInput={(params) => <input {...params}/> }
-                    />
-            </DemoContainer>
-            </LocalizationProvider>
-            </div>
+            <div className="calendar-search-container">
+            <SearchBar
+                readOnly={!isAdmin}
+                suburb={suburb}
+                url={addressUrl}
+                pageNavigation='/calendar'
+                title="Search for a calendar"
+                style={{
+                    display: "flex",
+                    margin: "0 auto",
+                    marginTop: "5em"
+                }}
+                />
 
 
 
-
-            <div  className="date-picker-container">
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={['DatePicker']}>
-                <DatePicker
-                    label="Pick A Date"
-                    value={selectedDate}
-                    onChange={handleDateChange}
-                    renderInput={(params) => (
-                        <div style={{position: 'relative'}}>
-                            <input className='MUI-input' {...params} /> 
+            {isAdmin && (
+                <>
+                    <div className="date-picker-container">
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DemoContainer components={['DatePicker']}>
+                            <DatePicker
+                                label="Set Starting Date (Monday only)"
+                                value={startingDate}
+                                onChange={handleStartingDateChange}
+                                renderInput={(params) => <input {...params}/> }
+                                />
+                        </DemoContainer>
+                        </LocalizationProvider>
                         </div>
-                    )}
-                    />
-            </DemoContainer>
-            </LocalizationProvider>
+                    <div  className="date-picker-container">
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DemoContainer components={['DatePicker']}>
+                            <DatePicker
+                                label="Pick A Date"
+                                value={selectedDate}
+                                onChange={handleDateChange}
+                                renderInput={(params) => (
+                                    <div style={{position: 'relative'}}>
+                                        <input className='MUI-input' {...params} /> 
+                                    </div>
+                                )}
+                                />
+                        </DemoContainer>
+                        </LocalizationProvider>
+                        </div>
+
+                        <div className='week-number'>
+                            <h3 style={{margin: '5px'}}>Week Number: </h3> <br />
+                        <h3>
+                            {weekDifferences}
+                        </h3>
+                        </div>
+                </>
+            )}
             </div>
 
-            <div className='week-number'>
-                <h3 style={{margin: '5px'}}>Week Number: </h3> <br />
-            <h3>
-                {weekDifferences}
-            </h3>
-            </div>
+                
 
-                <div className='background-img'></div>
+                <div className='background'></div>
         </div>
     )
 }

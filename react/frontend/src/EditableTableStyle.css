@@ -1,0 +1,215 @@
+
+.data-input {
+    padding: 10px;
+    color: #424242;
+    font-size: 1em;
+    border-radius: 3px;
+    resize: none;
+    background-color: white;
+    border: 1px solid rgb(183, 183, 183);
+    width: 100%;
+    height: 5em;
+    margin: 0;
+  }
+  .table-scroll {
+    overflow-y: auto;
+    max-height: 30em;
+  }
+#header-th {
+    max-width: 4em;
+    position: relative
+}
+
+#header-th #delete-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.header-table-head {
+    position: sticky;
+    top: 0;
+    background-color: #f9f6e5;
+}
+.header-input {
+    font-weight: 500;
+    padding: 10px;
+    color: #424242;
+    font-size: 0.8em !important;
+    resize: none;
+    border: 1px solid rgb(183, 183, 183);
+    height: 3.3em;
+    border-radius: 0 !important;
+    margin: 0;
+    width: auto !important;
+    max-width: 70%;
+    background-color: rgb(245, 253, 253) !important;
+}
+
+.data-input:focus, .header-input:focus {
+    border: 1.5px solid black;
+}
+
+.table-container h3 {
+    margin: 15px;
+}
+#delete-button, .table-container button, .delete-cancel-button {
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 0.6em 1em;
+    font-size: 15px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.25s;
+    background-color: rgb(229, 251, 255);
+    box-shadow: 2px 2px 5px rgba(0.1, 0.1, 0.1, 0.1);
+
+}
+
+#delete-button:hover, .table-container button:hover {
+    border-color: #646cff;
+  }
+
+
+#delete-button {
+    border: 1px solid rgb(183, 183, 183);
+    border-radius: 3px;
+    margin: 3px;
+    padding: 0.4em 0.7em;
+
+}
+
+.button-container {
+    display: flex;
+}
+.button-container p {
+    background-color: rgb(255, 230, 150);
+    padding: 5px;
+    margin: 0;
+    height: fit-content;
+}
+.button-container button {
+    margin: 10px;
+}
+
+.table-container {
+    background-color: rgb(254, 249, 241);
+    width: fit-content;
+    margin: 5em auto;
+    border-radius: 3px;
+    padding: 5px;
+    box-shadow: 2px 2px 10px rgba(0.3, 0.3, 0.3, 0.3);
+
+}
+
+.table-container .table-name-input {
+    width: 18em;
+}
+.table-name-input {
+    width: fit-content;
+    font-size: 22px;
+}
+
+#header-list {
+    position: absolute;
+    top: 2.7em;
+    left: 2em;
+    max-height: 10em;
+    overflow-y: scroll;
+    width: fit-content;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    z-index: 2;
+    font-weight: 400;
+    text-align: left;
+}
+
+#header-list li {
+    border-bottom: .3px solid grey;
+    cursor: pointer;
+}
+
+#header-list li:hover {
+    background-color: #c9dce8;
+    transition: 0.3s;
+}
+
+.delete-options-root {
+    position: absolute;
+    z-index: 9;
+    background-color: rgb(197, 253, 234);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 2px 2px 12px rgba(0.3, 0.3, 0.3, 0.3);
+    border-radius: 25px;
+    width: fit-content;
+    height: fit-content;
+    padding: 15px;
+
+}
+.delete-options-container {
+    display: flex;
+    box-shadow: 2px 2px 12px rgba(0.3, 0.3, 0.3, 0.3);
+    border-radius: 25px;
+}
+.delete-option {
+    background-color: white;
+    width: 15em;
+    height: 15em;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 25px;
+    box-shadow: 2px 2px 5px rgba(0.3, 0.3, 0.3, 0.3);
+    cursor: pointer;
+    font-size: 14px;
+    transition: .5s;
+
+}
+.delete-option:hover {
+    background-color: rgb(255, 238, 124);
+    transition: .5s;
+    color: rgb(163, 163, 163);
+}
+
+.delete-cancel-button {
+    position: relative;
+    right: 0;
+    top: 10px;
+    box-shadow: 2px 2px 5px rgba(0.3, 0.3, 0.3, 0.3);
+
+}
+
+.date-picker {
+    max-width: 30em;
+    z-index: 0;
+}
+.date-picker input {
+    background-color: white;
+    border-radius: 0;
+    height: 100%;
+    position: relative;
+    top: 0.4em;
+    border: none;
+}
+
+.bin-options {
+    display: flex;
+    margin: auto;
+
+}
+#select-bin-title {
+    font-weight: 100;
+    font-size: 14px;
+}
+
+#bin {
+    height: fit-content;
+    width: fit-content;
+    padding: 2px;
+    padding-bottom: 4px;
+    cursor: pointer;
+    margin: 2px;
+}

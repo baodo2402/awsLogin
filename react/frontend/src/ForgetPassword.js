@@ -5,15 +5,9 @@ import './ForgetPasswordStyle.css';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import { Header } from './Header';
+import AccessInformation from './service/AccessInformation';
 
-const requestConfig = {
-    headers: {
-        'x-api-key': 'EmYB7EcYzn2NK1dUkD2kK8MA18r5dp6tQ7wB7U1d'
-    }
-}
-const sendemailUrl = 'https://lyg1apc3wl.execute-api.ap-southeast-2.amazonaws.com/prod/sendemail';
-const compareCodeUrl = 'https://lyg1apc3wl.execute-api.ap-southeast-2.amazonaws.com/prod/comparecode';
-
+const { requestConfig, sendemailUrl, compareCodeUrl } = AccessInformation;
 
 export default function ForgetPassword() {
     const [email, setEmail] = useState('');

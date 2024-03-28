@@ -1,0 +1,85 @@
+.job-edit-search-bar-container.active {
+    position: fixed;
+    top: 4em;
+    left: 4em;
+    width: fit-content;
+    z-index: 1;
+    transition: .5s;
+    opacity: 1;
+}
+.job-edit-search-bar-container.inactive {
+    position: fixed;
+    top: -7em;
+    left: 4em;
+    width: fit-content;
+    z-index: 9;
+    transition: .5s;
+    opacity: 0;
+}
+
+
+.search-bar-job-edit.inactive {
+    display: none !important;
+}
+
+.menu-button-job-edit {
+    background-color: rgb(255, 255, 255);
+    margin: 0;
+    margin-left: 15px;
+    font-size: 18px;
+    position: fixed;
+    top: 4em;
+    border-radius: 20px;
+    width: 2.3em;
+    justify-content: center;
+    display: column;
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide any overflow content */
+    text-overflow: ellipsis;
+    transition: .5s;
+    z-index: 1;
+    box-shadow: 2px 2px 7px rgba(0.3, 0.3, 0.3, 0.3);
+
+}
+
+.menu-button-job-edit span {
+    font-size: 15px;
+    margin-left: 10px;
+}
+
+.menu-button-job-edit:hover {
+    width: 14em;
+    transition: .5s;
+}
+.job-edit-search-button {
+    cursor: pointer;
+    margin: 10px;
+    transition: .5s;
+}
+
+.job-edit-search-button:hover {
+    color: blue;
+    transition: .5s;
+}
+
+.information {
+    background-color: white;
+    position: absolute;
+    max-width: 50%;
+    padding: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    z-index: 9;
+    top: 5em;
+    left: 5em;
+    box-shadow: 2px 2px 7px rgba(0.3, 0.3, 0.3, 0.3);
+
+}
+.information-description {
+    display: block;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin: 10px auto;
+    text-align: center;
+}

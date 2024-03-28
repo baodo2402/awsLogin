@@ -8,8 +8,11 @@ import './profileStyle.css'
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import { Header } from './Header';
+import ColumTaskBar from './ColumnTaskBar';
+import AccessInformation from './service/AccessInformation';
 
-const triggerChangeInfoUrl = 'https://lyg1apc3wl.execute-api.ap-southeast-2.amazonaws.com/prod/changeinfo';
+const { requestConfig, triggerChangeInfoUrl} = AccessInformation;
+
 
 const Profile = () => {
     
@@ -49,14 +52,9 @@ const ChangeInfo = () => {
         
         setErrorMessage(null);
 
-        const requestConfig = {
-            headers: {
-                'x-api-key': 'EmYB7EcYzn2NK1dUkD2kK8MA18r5dp6tQ7wB7U1d'
-            }
-        }
         const requestBody = {
             newName: newName ? newName : name,
-            newUsername: newUsername ? newUsername : email,
+            newUsername: newUsername ? newUsername : username,
             newPhoneNumber: newPhoneNumber ? newPhoneNumber : phoneNumber,
             newPassword: newPassword,
             email: email
@@ -79,6 +77,7 @@ const ChangeInfo = () => {
     return (
         <div>
             <Header title='Change Information' />
+            <ColumTaskBar columnDisplay='none' />
             <div className='trigger-change-info'>
 
             <form onSubmit={submitHandler}>

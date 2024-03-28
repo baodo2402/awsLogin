@@ -18,12 +18,12 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 
   min-height: 100vh; /* Set a minimum height */
-  overflow: hidden;
-  z-index: -2;
+  /* overflow: hidden; */
+  /* z-index: -2; */
 }
 
 .background {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   min-width: 100%;
@@ -34,6 +34,19 @@ html, body {
   background-repeat: no-repeat;
   z-index: -1;
 }
+.home-image {
+  display: flex;
+  margin: 0 auto;
+  border-radius: 25px;
+  min-width: 19em;
+  min-height: 5em;
+  max-width: 35em;
+  max-height: 20em;
+  width: 50%;
+  height: 25%;
+  clip-path: inset(0 0 20% 0);
+    box-shadow: 2px 2px 5px rgba(0.3, 0.3, 0.3, 0.3);
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -42,17 +55,8 @@ code {
   font-size: 2.1rem;
   letter-spacing: 0px;
   line-height: 1em;
-  /* background: linear-gradient(
-    90deg,
-    rgb(255, 255, 255) 0%,
-    rgba(224, 156, 101, 0) 100%
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent; */
   width: fit-content;
   padding: 3rem 1.5rem 1.5rem 1.5rem;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -61,7 +65,7 @@ code {
   --font-roboto: "Roboto Slab", serif;
   --font-raleway: "Raleway", sans-serif;
   position: absolute;
-  top: 5em;
+  top: 5.5em;
   text-align: center;
   z-index: 9;
   color: white;
@@ -89,6 +93,16 @@ code {
   padding: 7% 1% 8% 2%;
 }
 
+.header #home-label {
+  position: absolute;                                    
+  left: 35px;
+}
+
+.header #login-label {
+  position: absolute;
+  right: 35px;
+}
+
 .header span {
   position: absolute;
   top: 8px;
@@ -103,6 +117,7 @@ code {
 }
 #home, #login, #register {
   display: none;
+  cursor: pointer;
 }
 
 #home:checked ~ .indicator {
@@ -115,6 +130,15 @@ code {
 #login:checked ~ .indicator {
   left: 81%;
   width: 9%;
+}
+
+.login-container, .register-container {
+  display: flex;
+  margin: 2em auto;
+  width: fit-content;
+  height: fit-content;
+  box-shadow: 2px 2px 40px rgba(36, 36, 36, 0.405);
+  border-radius: 25px;
 }
 @media (min-width: 445px) {
   #home:checked ~ .indicator {
@@ -143,6 +167,8 @@ code {
     width: 8%;
   }
 }
+
+/* */
 @media (min-width: 680px) {
   #home:checked ~ .indicator {
     width:7%;
@@ -153,12 +179,66 @@ code {
   }
 }
 @media (min-width: 800px) {
+  .home-title {
+    top: 6.5em;
+  }
   #home:checked ~ .indicator {
     width:6%;
   }
   #login:checked ~ .indicator {
-    left: 90%;
+    left: 220px;
     width: 8%;
+  }
+  #register:checked ~ .indicator {
+    left: 120px;
+    width: 7%;
+  }
+  .header #home-label {
+    position: absolute;
+    left: 35px;
+    cursor: pointer;
+  }
+  .header #register-label {
+    position: absolute;
+    left: 120px;
+    cursor: pointer;
+  }
+  .header #login-label {
+    position: absolute;
+    left: 230px;
+    cursor: pointer;
+  }
+  .header #login-label:hover, .header #home-label:hover, .header #register-label:hover {
+    transition: 0.5s;
+    color: rgb(238, 255, 0);
+  }
+}
+
+@media (min-width: 1000px) {
+  #home:checked ~ .indicator {
+    width:5%;
+  }
+  #login:checked ~ .indicator {
+    left: 230px;
+    width: 5%;
+  }
+  #register:checked ~ .indicator {
+    left: 130px;
+    width: 5%;
+  }
+}
+
+@media (min-width: 1300px) {
+  #home:checked ~ .indicator {
+    width:4%;
+  }
+  #login:checked ~ .indicator {
+    left: 230px;
+    width: 4%;
+  }
+  #register:checked ~ .indicator {
+    left: 120px;
+    width: 4%;
   }
 }
 
@@ -193,7 +273,8 @@ input[type="text"],
 input[type="email"],
 input[type="number"],
 input[type="password"]{
-  width: 85%;
+  box-sizing: border-box;
+  width: 90%;
   padding: 6px;
   margin-bottom: 15px;
   border: 1px solid #ccc;
@@ -202,7 +283,7 @@ input[type="password"]{
   background-color: rgb(252, 237, 248);
 }
 input[type="submit"] {
-  width: 85.95%;
+  width: 90%;
   /* width: fit-content; */
   height: 2em;
   color:rgb(249, 249, 239);
@@ -215,29 +296,82 @@ input[type="submit"] {
   background-color: #e7a22b;
   text-align: center;
   box-shadow: 2px 2px 15px rgba(0.3, 0.3, 0.3, 0.3);
+  cursor: pointer;
 }
 input[type="submit"]:active {
   background-color: #fcd89a;
+  cursor: pointer;
 }
 
 .login-layout {
-  padding: 0;
+  padding-left: 10px;
+  padding-right: 10px;
   justify-content: center;
   align-items: center;
-  margin: 5% 2% 0 2%;
-  background-color:#f6f1f1;
-  border-radius: 15px;
-  box-shadow: 5px 5px 20px rgba(0.5, 0.5, 0.5, 0.5);
-}
-.login-layout form {
-  padding: 3% 0 25% 10%;
+  background-color:#ffffff;
+  width: 21.5em;
+  border-radius: 25px;
 }
 .login-head {
+  max-width: 21.5em;
+  border-radius: 25px 25px 0 0;
+}
+#male-cleaner {
+  display: none;
+  filter: brightness(1.15);
+  padding: 10px;
+}
+
+@media (min-width: 800px) {
+  .login-layout {
+    height: 25em;
+  }
+  .login-frame {
+    display: flex;
+  }
+  #male-cleaner {
+    min-width:17em;
+    height: 25em;
+    position: relative;
+    display: block;
+  }
+}
+
+@media (min-width: 1000px) {
+  .login-frame {
+    display: flex;
+  }
+  #male-cleaner {
+    min-width:17em;
+    height: 25em;
+    position: relative;
+    display: block;
+  }
+}
+@media (min-width: 1255px) {
+  .login-frame {
+    display: flex;
+  }
+  #male-cleaner {
+    min-width:17em;
+    height: 25em;
+    position: relative;
+    left: 5px;
+  }
+}
+
+
+.login-head {
+  position: relative;
+  left: -10px;
+  right: -10px;
   background-color: #ea9c58ef;
-  border-radius: 15px 15px 0 0;
+  margin: auto;
   text-align: center;
   padding: 1px 0 1px 0;
   color: white;
+  width: 30em;
+
 }
 h5 {
   font-size: 17px;

@@ -8,9 +8,9 @@ const uuid = require('uuid');
 const tableName = 'user-info-table'
 
 async function shift(userInfo) {
-    const { email, timeIn } = userInfo;
+    const { email, date, timeIn, address, lonAndLat } = userInfo;
 
-    if (!email || !timeIn) {
+    if (!email || !date || !timeIn || !address || !lonAndLat) {
         return util.buildResponse(400, {
             message: 'Missing or invalid data'
         });
@@ -18,19 +18,19 @@ async function shift(userInfo) {
     
     try {
         const dateInSplit = timeIn.split(",");
-        const dateIn = dateInSplit[0].trim();
         const dynamoUser = await getUser(email);
         const uniqueId = uuid.v4();
         if (dynamoUser && dynamoUser.email && dynamoUser.name) {
             await saveUser({
                 email: dynamoUser.email,
                 name: dynamoUser.name,
+                date: date,
                 timeIn,
-                dateIn: dateIn,
+                address: address,
                 id: uniqueId
             });
 
-            await saveUuid(dynamoUser.email, uniqueId);
+            await saveUuid(dynamoUser.email, uniqueId, address, lonAndLat);
 
             return util.buildResponse(200, {
                 email: dynamoUser.email
@@ -79,15 +79,17 @@ async function saveUser(user) {
     }
 }
 
-async function saveUuid(email, uuid) {
+async function saveUuid(email, uuid, address, lonAndLat) {
     const params = {
         TableName: tableName,
         Key: {
             email: email
         },
-        UpdateExpression: 'SET id = :id',
+        UpdateExpression: 'SET id = :id, address = :address, lonAndLat = :lonAndLat',
         ExpressionAttributeValues: {
-            ':id': uuid
+            ':id': uuid,
+            ':address': address,
+            ':lonAndLat': lonAndLat
         }
     };
 

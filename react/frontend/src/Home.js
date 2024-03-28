@@ -1,6 +1,7 @@
 import React from 'react';
 import './index.css'
 import Logo from './image/cleanntidyLogo.png';
+import background from './image/home-img.png'
 
 const Home = () => {
 
@@ -22,7 +23,7 @@ const Home = () => {
                             }}>
                 <h1 className='home-title'>Clean 'n' Tidy <br /> Property Services</h1>
             </section>
-            
+            {/* <img src={background} className='home-image' /> */}
             
         </div>
     )

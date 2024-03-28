@@ -6,8 +6,10 @@ import { CgProfile } from 'react-icons/cg';
 import './profileStyle.css'
 import { FaPenAlt } from 'react-icons/fa';
 import { Header } from './Header';
+import ColumTaskBar from './ColumnTaskBar';
+import AccessInformation from './service/AccessInformation';
 
-const triggerChangeInfoUrl = 'https://lyg1apc3wl.execute-api.ap-southeast-2.amazonaws.com/prod/triggerchangeinfo';
+const { triggerChangeInfoUrl, requestConfig } = AccessInformation;
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -34,11 +36,7 @@ const Profile = () => {
             return;
         }
         setMessage(null);
-        const requestConfig = {
-            headers: {
-                'x-api-key': 'EmYB7EcYzn2NK1dUkD2kK8MA18r5dp6tQ7wB7U1d'
-            }
-        }
+
         const requestBody = {
             password: password,
             token: token,
@@ -56,25 +54,11 @@ const Profile = () => {
             }
         })
     }
-    
-
-    const input = {
-        marginTop: '10%',
-        margin: '15px auto',
-        fontSize: '22px',
-        padding: '0 0 0 10px',
-        backgroundColor: 'white',
-        borderRadius: '10px',
-        height: showPasswordField ? '10em' : '0',
-        maxWidth: '90%',
-        boxShadow: "3px 3px 5px rgba(0.5, 0.5, 0.5, 0.5)",
-        fontWeight: '500',
-        transition: 'height 0.5s'
-    }
         
     return (
         <div className='profile-layout'>
             <Header title="Profile" />
+            <ColumTaskBar columnDisplay='none' />
             <div className='profile-info'>
                 <div id='profile-content'>
                     <div  style={{
@@ -94,16 +78,6 @@ const Profile = () => {
                 </div>
 
                     <button className='profile-button'
-                style={{
-                    width: '100%',
-                    height: '40px',
-                    borderRadius: '0 0 10px 10px',
-                    border: 'none',
-                    fontSize: '17px',
-                    fontWeight: '600',
-                    color: 'white',
-                    backgroundColor: '#e7a22b'
-                 }}
                  onClick={() => setShowPasswordField(!showPasswordField)}
                  > <FaPenAlt /> Update Your Information</button>
                 </div>
@@ -116,6 +90,7 @@ const Profile = () => {
                         value={password}
                         onChange={event => setPassword(event.target.value)}/> <br/>
                         <input type="submit" value="Submit" />
+                        <p>{message}</p>
                     </form>
                  </div>
                  <div className='background'></div>

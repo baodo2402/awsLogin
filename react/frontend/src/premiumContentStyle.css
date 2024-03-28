@@ -1,23 +1,28 @@
-html, body {
+/* html, body {
   overflow-x: hidden;
   overflow-y: hidden;
-  /* overflow-y: hidden; */
-}
+
+} */
 
 .dropdown-input {
     display: block;
   }
 
 .account-layout {
+  position: fixed;
+  top: 0;
+  left: 0;
   font-size: 18px;
   font-weight: 500;
   color: #040404;
   padding: 10px 20px 17px 10px;
   margin: 0 0 0 0;
+  height: 56px;
   background-color: rgba(229, 163, 93, 0.884);
   box-shadow: 4px 4px 4px -1px rgba(10, 99, 169, 0.16),
               -4px -4px 4px -1px rgba(255, 255, 255, 0.70);
-  z-index: 3;
+  z-index: 1;
+  width: 100%;
 } 
 
 
@@ -44,10 +49,11 @@ html, body {
   background-color: rgb(249, 240, 238);
   z-index: -1;
 }
+
   .hamburger {
     color: black;
     /* display: inline-block; */
-    position: absolute;
+    position: fixed;
     top: 8px;
     right: 8px;
     width: 40px;
@@ -56,7 +62,7 @@ html, body {
     flex-direction: column;
     justify-content: space-between;
     cursor: pointer;
-    z-index: 2;
+    z-index: 3;
   }
   
   .line {
@@ -87,35 +93,185 @@ html, body {
 }
 #dropdown-content {
   display: block;
-  position: absolute;
+  position: fixed;
   right: 100%;
-  opacity: 0;
   top: 3em;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 3;
+  z-index: 4;
   align-items: left;
   overflow: hidden;
-  transition: 0.2s;
+  transition: 0.5s;
 
 }
 #dropdown-content button {
   font-weight: 600;
-  background-color: rgba(243, 222, 197, 0.888);
+  background-color: rgb(243, 222, 197);
   font-size: 18px;
   text-align: right;
   padding: 5px 15px 5px 10px;
   display: inline-block;
-  align-items: right;
-  width: 9em;
+  width: 12em;
   height: 2.25em;
   overflow: hidden;
   border: none;
   transition-delay: calc(60ms * var(--i));
+  margin: 2px auto;
+  border-radius: 25px;
+  transition: .2s;
 }
 
+#dropdown-content button:hover {
+  background-color: rgba(244, 215, 181, 0.93);
+  color: white;
+  width: 12em;
+  transition: .3s;
+  left: 15px;
+  border: 2px solid white;
+  transition-timing-function: ease-in-out;
+  cursor: pointer;
+}
 
 #menu-toggle:checked + .hamburger + #dropdown-content {
   right: 0;
   opacity: 1;
 }
   
+#male-cleaner-premium {
+  top: 15em;
+  width: 15em;
+  height: 20em;
+  filter: brightness(1.15);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%); /* Center the image horizontally */
+  margin-left: 10px;           /* Adjust the left margin as needed */
+  margin-right: 10px;
+
+}
+.account-layout #clean-n-tidy-tittle {
+  position: absolute;
+  left: 50px;
+  top: -15px;
+  color: white;
+  display: block;
+  font-family: 'Pacifico', cursive;
+  font-size: 25px;
+  font-weight: 100;
+}
+
+.quick-access-button-container {
+  border-radius: 15px;
+  background-color: white;
+  width: 10em;
+  text-align: center;
+  margin: 0 auto;
+  margin: 5px;
+  height: 10em;
+  padding: 10px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+@media (min-width: 800px) {
+  .background-img{
+    border-radius: 0;
+  }
+  #dropdown-content button {
+    border-bottom: 0.5px solid black;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    width: 12em;
+    text-align: center;
+    opacity: 1;
+    border-radius: 5px;
+    background-color: rgb(245, 230, 210);
+  }
+
+  #dropdown-content {
+    left: 0;
+    right: 76%;
+    top: 57px;
+    opacity: 1;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 4;
+    align-items: left;
+    overflow: hidden;
+    transition: 0.2s;
+    border-radius: 0 0 15px 0;
+    background-color:  rgb(245, 230, 210);
+    width: fit-content;
+    height: 100%;
+  }
+
+  #menu-toggle:checked + .hamburger + #dropdown-content {
+    right: 76%;
+    opacity: 1;
+    top: 57px;
+
+  }
+  .hamburger .line {
+    display: none; 
+  }
+
+  .account-layout #clean-n-tidy-tittle {
+    position: absolute;
+    right: 35px;
+    top: -10px;
+    color: white;
+    display: block;
+  }
+}
+@media (min-width: 1250px) {
+  #dropdown-content {
+    right: 84%;
+    width: fit-content;
+  }
+  #menu-toggle:checked + .hamburger + #dropdown-content {
+    right: 84%;
+    top: 57px;
+  }
+  .account-layout #clean-n-tidy-tittle {
+    position: absolute;
+    right: 35px;
+    top: -10px;
+    color: white;
+    display: block;
+  }
+}
+
+.welcome-section {
+  display: block;
+  width: 15em;
+  justify-content: center;
+  text-align: center;
+  line-height: 1;
+  padding: 0;
+  position: relative;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-left: 5px;      
+  margin-right: 5px;
+  font-family: 'Architects Daughter', cursive;
+  font-weight: 600;
+  font-size: 24px;
+  color: white;
+}
+.welcome-section #sunWrapper {
+  display: inline-block;
+  padding: 0;
+  padding-top: 4px;
+  margin: 0;
+  color: yellow;
+  animation: rotateSun 6s infinite linear;
+}
+
+@keyframes rotateSun {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+

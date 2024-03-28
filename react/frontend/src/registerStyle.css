@@ -1,10 +1,50 @@
 .register-layout {
     padding: 0;
-    margin: 5% 2% 0 2%;
+    justify-content: center;
+    align-items: center;
     background-color:#f6f1f1;
     border-radius: 15px;
-    box-shadow: 5px 5px 20px rgba(0.5, 0.5, 0.5, 0.5);
+    width: 20.5em;
   }
+
+  #female-cleaner {
+    filter: brightness(1.15);
+    display: none;
+    padding: 10px;
+  }
+  @media (min-width: 900px) {
+    #female-cleaner {
+        width: 25em;
+        height: 40em;
+        position: relative;
+        display: block;
+    }
+    .register-layout {
+        width: 25em;
+        height: 40em;
+      }
+  }
+  @media (min-width: 1234px) {
+    .register-layout {
+      width: 35em;
+      min-width: 30%;
+      height: 40em;
+    }
+    .register-frame {
+      display: flex;
+      margin: 0 auto;
+    }
+    #female-cleaner {
+      width: 27em;
+      height: 40em;
+    }
+  }
+@media (min-width: 800px) {
+    .register-layout {
+        max-width: 30em;
+        max-height: 40em;
+    }
+}
 .register-layout form {
     padding: 3% 0 25% 10%;
 }

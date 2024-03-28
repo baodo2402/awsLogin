@@ -8,9 +8,9 @@ const dynamodb = new AWS.DynamoDB.DocumentClient();
 const tableName = 'user-info-table'
 
 async function timeOut(userInfo) {
-    const { email, timeOut } = userInfo;
+    const { email, timeOut, address } = userInfo;
 
-    if(!email && !timeOut) {
+    if(!email && !timeOut || !address) {
         return util.buildResponse(400, {
             message: 'Missing or invalid data'
         });
@@ -18,9 +18,9 @@ async function timeOut(userInfo) {
 
     try {
         const dynamoUser = await getUser(email);
-        const dynamoId = await getUuid(email)
-        if(dynamoUser && dynamoUser.email) {
-            await saveTimeOut(dynamoId, timeOut);
+        const dynamoIdAndAddress = await getUuid(email)
+        if(dynamoUser && dynamoUser.email && dynamoIdAndAddress[1] === address) {
+            await saveTimeOut(dynamoIdAndAddress[0], timeOut);
             return util.buildResponse(200, {
                 email: dynamoUser.email
             });
@@ -70,7 +70,9 @@ async function getUuid(email) {
         if (response.Item) {
             // Access the id from the response.Item
             const id = response.Item.id;
-            return id;
+            const address = response.Item.address;
+            const idAndAddress = [id, address]
+            return idAndAddress;
         } else {
             // No matching item found
             return null;

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { getUser, resetUserSession } from './AuthService';
 import { useNavigate } from 'react-router-dom';
 
 export default function CalendarOptions() {

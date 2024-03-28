@@ -16,6 +16,11 @@ const sendPasswordEmailService = require("./service/sendPasswordEmail");
 const setYearArrayService = require("./service/setYearArray")
 const compareCodeService = require("./service/compareCode");
 const resetPasswordService = require("./service/resetPassword");
+const compareCoordinatesService = require("./service/compareCoordinates");
+const createTableService = require("./service/createTable");
+const displayTableResultService = require("./service/displayTableResults");
+const listTablesService = require("./service/listTables");
+const missedPunchClockService = require("./service/missedPunchClock")
 
 const util = require('./utils/util');
 
@@ -35,7 +40,12 @@ const getTaskStatusPath = '/gettaskstatus';
 const sendPasswordEmailPath = '/sendemail';
 const setYearArrayPath = '/setyear'
 const compareCodePath = '/comparecode';
-const resetPasswordPath = '/resetpassword'
+const resetPasswordPath = '/resetpassword';
+const compareCoordinatesPath = '/comparecoordinates';
+const createTablePath = '/createtable';
+const displayTableResultPath = '/displaytableresults';
+const listTablesPath = '/listtable';
+const missedPunchClockPath = '/missedpunchclock'
 
 exports.handler = async (event) => {
   console.log('Request Event: ', event);
@@ -111,6 +121,25 @@ exports.handler = async (event) => {
     case event.httpMethod === 'POST' && event.path === resetPasswordPath:
       const resetPasswordBody = JSON.parse(event.body);
       response = await resetPasswordService.resetPassword(resetPasswordBody);
+      break;
+    case event.httpMethod === 'POST' && event.path === compareCoordinatesPath:
+      const compareCoordinatesBody = JSON.parse(event.body);
+      response = await compareCoordinatesService.compareCoordinates(compareCoordinatesBody);
+      break;
+    case event.httpMethod === 'POST' && event.path === createTablePath:
+      const createTableBody = JSON.parse(event.body);
+      response = await createTableService.createTable(createTableBody);
+      break;
+    case event.httpMethod === 'POST' && event.path === displayTableResultPath:
+      const displayTableResultBody = JSON.parse(event.body);
+      response = await displayTableResultService.displayTableResult(displayTableResultBody);
+      break;
+    case event.httpMethod === 'GET' && event.path === listTablesPath:
+      response = await listTablesService.listTables();
+      break;
+    case event.httpMethod === 'POST' && event.path === missedPunchClockPath:
+      const missedPunchClockBody = JSON.parse(event.body);
+      response = await missedPunchClockService.missedPunchClock(missedPunchClockBody);
       break;
     default:
       response = await util.buildResponse(404, "404 Not Found");

@@ -12,13 +12,16 @@ import PublicRoute from "./routes/PublicRoute";
 import PrivateRoute from "./routes/PrivateRoute";
 import ResetPassword from "./ResetPassword";
 import CalendarSearch from "./CalendarSearch";
+import StaffsManagement from "./StaffsManagement";
 import './index.css'
-
 import React, { useState, useEffect } from "react";
 import { getUser, getToken, setUserSession, resetUserSession } from "./service/AuthService";
 import axios from "axios";
+import AccessInformation from "./service/AccessInformation";
+import AddOrEditJobs from "./AddOrEditJobs";
 
-const verifyTokenAPIURL = 'https://lyg1apc3wl.execute-api.ap-southeast-2.amazonaws.com/prod/verify';
+const { requestConfig ,verifyTokenAPIURL } = AccessInformation;
+
 function App() {
   
   
@@ -34,11 +37,6 @@ function App() {
 
     }
 
-    const requestConfig = {
-      headers: {
-          'x-api-key': 'EmYB7EcYzn2NK1dUkD2kK8MA18r5dp6tQ7wB7U1d'
-      }
-    }
     const requestBody = {
       user: getUser(),
       token: token
@@ -111,7 +109,15 @@ function App() {
               <Route element={<PrivateRoute isAuthenticated={isAuthenticating}/>}>
                 <Route path="/calendarsearching" element={<CalendarSearch />} />
               </Route>
-              
+
+              <Route element={<PrivateRoute isAuthenticated={isAuthenticating}/>}>
+                <Route path="/staff-management" element={<StaffsManagement />} />
+              </Route>
+
+              <Route element={<PrivateRoute isAuthenticated={isAuthenticating}/>}>
+                <Route path="/add-or-edit-jobs" element={<AddOrEditJobs />} />
+              </Route>
+            
             </Routes>
           </>
         )}
@@ -145,7 +151,7 @@ function Header() {
       <div className="header">
         <div className="background"></div>
          <input type="radio" name="hi" id="home" onChange={handleHome} defaultChecked/>
-        <label htmlFor="home" style={{position: "absolute", left: "35px"}}>
+        <label htmlFor="home" id="home-label" >
           Home
         </label>
 
@@ -155,7 +161,7 @@ function Header() {
         </label>
 
         <input type="radio" name="hi" id="login" onChange={handleLogin} />
-        <label htmlFor="login" style={{position: "absolute", right: "35px"}} >
+        <label htmlFor="login" id="login-label" >
           Login
         </label>
         <span className="indicator"></span>

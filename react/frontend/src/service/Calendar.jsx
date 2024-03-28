@@ -15,20 +15,15 @@ import { Header } from '../Header';
 import './CalendarStyle.css';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import ColumTaskBar from '../ColumnTaskBar';
+import AccessInformation from './AccessInformation';
+
+const { requestConfig, getTasksUrl, getTaskStatusUrl, calendarUrl } = AccessInformation;
 
 var weekOfYear = require('dayjs/plugin/weekOfYear')
 dayjs.extend(weekOfYear);
 
 const startingDate = '2023-09-25'
-
-const getTasksUrl = 'https://lyg1apc3wl.execute-api.ap-southeast-2.amazonaws.com/prod/gettasks';
-const getTaskStatusUrl = 'https://lyg1apc3wl.execute-api.ap-southeast-2.amazonaws.com/prod/gettaskstatus';
-const calendarUrl = 'https://lyg1apc3wl.execute-api.ap-southeast-2.amazonaws.com/prod/calendar';
-const requestConfig = {
-  headers: {
-    'x-api-key': 'EmYB7EcYzn2NK1dUkD2kK8MA18r5dp6tQ7wB7U1d'
-  }
-};
   
   //let testDay = dayjs('2023-1-1');
   
@@ -59,7 +54,6 @@ function fakeFetch(date, { signal }) {
     const weekDifferences = date.diff(startingDate, 'week');
     const jobControlTableName = localStorage.getItem('jobControlTableName');
     console.log('fakeFetch year ' + date.format('YYYY') + "tableName " + jobControlTableName);
-
 
   //let testDay = dayjs('2023-10-1')
 
@@ -189,7 +183,7 @@ export default function DateCalendarServerRequest() {
   const requestAbortController = React.useRef(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const [highlightedDays, setHighlightedDays] = React.useState();
-  const jobControlTableName = localStorage.getItem('jobControlTableName');
+  const jobControlTableName = localStorage.getItem('TableName');
 
   const [selectedDate, setSelectedDate] = useState(dayjs());
 
@@ -197,6 +191,9 @@ export default function DateCalendarServerRequest() {
   const [evenFortnightlyHeaderPosition, setEvenFortnightlyHeaderPosition] = useState();
   const [oddFortnightlyHeaderPosition, setOddFortnightlyHeaderPosition] = useState();
   const [monthlyHeaderPosition, setMonthlyHeaderPosition] = useState();
+  const [quarterlyHeaderPosition, setQuarterlyHeaderPosition] = useState();
+
+  console.log("job control ", jobControlTableName)
 
   const fetchHighlightedDays = (date) => {
     const controller = new AbortController();
@@ -285,7 +282,9 @@ useEffect(() => {
   const [weeklyTaskAndStatus, setWeeklyTaskAndStatus] = useState({});
   const [fortnightlyTaskAndStatus, setFortnightlyTaskAndStatus] = useState({});
   const [monthlyTaskAndStatus, setMonthlyTaskAndStatus] = useState({});
+  const [quarterlyTask, setQuarterlyTask] = useState({});
   const [isTaskAndStatusReady, setIsTaskAndStatusReady] = useState(false);
+  
 
   let weeklyStatus = {};
   let fortnightlyStatus = {};
@@ -397,24 +396,32 @@ useEffect(() => {
               setMonthlyHeaderPosition(null);
             }
           }
-      // if ((csvHeaders[2]?.includes(date) && weekDifference % 4 === 0) ||
-      //     (csvHeaders[2]?.includes(dayjs().format('dddd')) && weekDifference % 4 === 0)) {
-      //   try {
-      //     //setTaskAndStatus({});
-      //     const statusDate = selectedDate.format('YYYY-MM-DD') + '-' + csvHeaders[2]
-      //     setCsvHeaderOrder(date);
-      //     taskBody = await getTasks(date, 'Monthly', jobControlTableName)
-      //     task = taskBody.csvData.filter(item => item !== "");
-      //     setMonthlyTask({ task });
-      //     GetTaskStatus(statusDate);
-      //     console.log(task);
-      //   } catch (error) {
-      //       console.error(error);
-      //   }
-      // } else {
-      //   setMonthlyTask(null);
-      //   setCsvHeaderOrder(null);
-      // }
+
+//calculate quarterly task (every 3 months)
+
+            for (let i = 0; i<= csvHeaders.length; i++) {
+              if((csvHeaders[i]?.includes(date) && csvHeaders[i]?.includes('Quarterly') && weekDifference % 4 === 0)) {
+                console.log('monthly met');
+                try {
+                  //setTaskAndStatus({});
+                  const statusDate = selectedDate.format('YYYY-MM-DD') + '-' + csvHeaders[i]
+                  setCsvHeaderOrder(date);
+                  taskBody = await getTasks(date, 'Monthly', jobControlTableName)
+                  task = taskBody.csvData.filter(item => item !== "");
+                  setMonthlyTask({ task });
+                  GetTaskStatus(statusDate);
+                  setMonthlyHeaderPosition(i);
+                  console.log(task);
+                  break;
+                } catch (error) {
+                    console.error(error);
+                }
+              } else {
+                setQuarterlyTask(null);
+                setCsvHeaderOrder(null);
+                setQuarterlyHeaderPosition(null);
+              }
+            }
 
 //calculate fortnightly (even)
           // for (let i = 7; i <=13; i++) {
@@ -426,8 +433,8 @@ useEffect(() => {
                 const statusDate = selectedDate.format('YYYY-MM-DD') + '-' + csvHeaders[i]
                 setCsvHeaderOrder(date);
                 taskBody = await getTasks(date, 'EvenFortnightly', jobControlTableName)
-                task = taskBody.csvData.filter(item => item !== "");
-                setEvenFortnightlyTask({ task });
+                task = taskBody.csvData.filter(item => item !== "").map(item => item.replace(/�/g, ' ').trim());
+                setEvenFortnightlyTask({ task }); 
                 GetTaskStatus(statusDate)
                 setEvenFortnightlyHeaderPosition(i);
                 
@@ -454,7 +461,7 @@ useEffect(() => {
                   const statusDate = selectedDate.format('YYYY-MM-DD') + '-' + csvHeaders[i]
                   setCsvHeaderOrder(date);
                   taskBody = await getTasks(date, 'OddFortnightly', jobControlTableName)
-                  task = taskBody.csvData.filter(item => item !== "");
+                  task = taskBody.csvData.filter(item => item !== "").map(item => item.replace(/�/g, ' ').trim());
                   setOddFortnightlyTask({ task });
                   GetTaskStatus(statusDate)
                   setOddFortnightlyHeaderPosition(i);
@@ -500,7 +507,7 @@ useEffect(() => {
                     const statusDate = selectedDate.format('YYYY-MM-DD') + '-' + csvHeaders[i];
                     setCsvHeaderOrder(date);
                     taskBody = await getTasks(date, 'Weekly', jobControlTableName)
-                    task = taskBody.csvData.filter(item => item !== "");
+                    task = taskBody.csvData.filter(item => item !== "").map(item => item.replace(/�/g, ' ').trim());
                     setWeeklyTask({ task });
                     GetTaskStatus(statusDate)
                     setWeeklyHeaderPosition(i);
@@ -838,95 +845,98 @@ useEffect(() => {
     //     </div>
     //   ) : (
       isCalendarRoute && (
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Header title="Calendar" />
-        <DateCalendar
-          defaultValue={initialValue}
-          loading={isLoading}
-          value={selectedDate}
-          onMonthChange={handleMonthChange}
-          onChange={handleDateChange}
-          renderLoading={() => <DayCalendarSkeleton />}
-          // slots={{
-          //   day: ServerDay,
-          // }}
-          style={{
-            margin: "10px auto",
-            marginTop: '2em',
-            boxShadow: "5px 5px 20px rgba(0.5, 0.5, 0.5, 0.5)",
-            zIndex: "-1"
-            
-          }}
-          slotProps={{
-            day: {
-              highlightedDays,
-            },
-          }}
-        />
         
-        <div className={`task-field ${expand ? 'active' : 'inactive'}`} >
+        <LocalizationProvider className='calendar-container-parent' dateAdapter={AdapterDayjs} >
+          
+        <Header title="Calendar" />
+        <ColumTaskBar columnDisplay='none' />
+        <div className='calendar-container-parent'>
+          <div className='DateCalendar' >
+            <DateCalendar
+              defaultValue={initialValue}
+              loading={isLoading}
+              value={selectedDate}
+              onMonthChange={handleMonthChange}
+              onChange={handleDateChange}
+              renderLoading={() => <DayCalendarSkeleton />}
+              // slots={{
+              //   day: ServerDay,
+              // }}
+              style={{
+                boxShadow: "5px 5px 20px rgba(0.5, 0.5, 0.5, 0.5)",
+                
+              }}
+              slotProps={{
+                day: {
+                  highlightedDays,
+                },
+              }}
+            />
+          </div>
+          
+          
+          <div className={`task-field ${expand ? 'active' : 'inactive'}`} >
 
-                <section className='task-header' style={{display: 'flex', position: "absolute"}}>
-                  <button id='expand-button' onClick={() => setExpand(!expand)}>
-                    {expand ? 'Collapse' : 'Expand'}
-                  </button>
-                </section>
-                <h4>{jobControlTableName} <br />Working Schedule:</h4>
-              <p>{selectedDate.format('dddd')}</p>
-                <ul>
-                  <p style={{ fontWeight: "700"}}>Weekly tasks:</p>
-                  {weeklyTask?.task && (
-                    <>
-                      {weeklyTask?.task.some(item => item.includes('General Waste')) && '🔴'}
-                      {weeklyTask?.task.some(item => item.includes('Recycling')) && '🟡'}
-                      {weeklyTask?.task.some(item => item.includes('FOGO')) && '🟢'}
+                  <section className='task-header' >
+                    <button id='expand-button' onClick={() => setExpand(!expand)}>
+                      {expand ? 'Collapse' : 'Expand'}
+                    </button>
+                  </section>
+                  <h4>{jobControlTableName} <br />Working Schedule:</h4>
+                <p>{selectedDate.format('dddd')}</p>
+                  <ul>
+                    <p style={{ fontWeight: "700"}}>Weekly tasks:</p>
+                    {weeklyTask?.task && (
+                      <>
+                        {weeklyTask?.task.some(item => item.includes('General Waste')) && '🔴'}
+                        {weeklyTask?.task.some(item => item.includes('Recycling')) && '🟡'}
+                        {weeklyTask?.task.some(item => item.includes('FOGO')) && '🟢'}
 
-                    </>
-                  )}
-
-
-                  {listWeeklyTasks}
-                  <button style={{ position: 'relative', left:'15em', height: '2.5em' }} onClick={submitWeeklyTasks} >Submit</button>
-
-                  <p style={{ fontWeight: "700"}}>Fortnightly tasks:</p>
-                  {evenFortnightlyTask?.task && (
-                    <>
-                      {evenFortnightlyTask?.task.some(item => item.includes('General Waste')) && '🔴'}
-                      {evenFortnightlyTask?.task.some(item => item.includes('Recycling')) && '🟡'}
-                      {evenFortnightlyTask?.task.some(item => item.includes('FOGO')) && '🟢'}
-                    </>
-                  )}
-                    
-                  {oddFortnightlyTask?.task && (
-                    <>
-                      {oddFortnightlyTask?.task.some(item => item.includes('General Waste')) && '🔴'}
-                      {oddFortnightlyTask?.task.some(item => item.includes('Recycling')) && '🟡'}
-                      {oddFortnightlyTask?.task.some(item => item.includes('FOGO')) && '🟢'}
-                    </>
-                  )}
-
-                  {listFortnightlyTasks}
-                  <button style={{ position: 'relative', left:'15em', height: '2.5em' }} onClick={submitFortnightlyTasks} >Submit</button>
-
-                  <p style={{ fontWeight: "700"}}>Monthly tasks:</p>
-                  {monthlyTask?.task && (
-                    <>
-                      {monthlyTask?.task.some(item => item.includes('General Waste')) && '🔴'}
-                      {monthlyTask?.task.some(item => item.includes('Recycling')) && '🟡'}
-                      {monthlyTask?.task.some(item => item.includes('FOGO')) && '🟢'}
-                    </>
-                  )}
+                      </>
+                    )}
 
 
-                  {listMonthlyTasks}
-                  <button style={{ position: 'relative', left:'15em', height: '2.5em' }}onClick={submitMonthlyTasks} >Submit</button>
-                </ul>
+                    {listWeeklyTasks}
+                    <button style={{ position: 'relative', right:'5px', height: '2.5em' }} onClick={submitWeeklyTasks} >Submit</button>
+
+                    <p style={{ fontWeight: "700"}}>Fortnightly tasks:</p>
+                    {evenFortnightlyTask?.task && (
+                      <>
+                        {evenFortnightlyTask?.task.some(item => item.includes('General Waste')) && '🔴'}
+                        {evenFortnightlyTask?.task.some(item => item.includes('Recycling')) && '🟡'}
+                        {evenFortnightlyTask?.task.some(item => item.includes('FOGO')) && '🟢'}
+                      </>
+                    )}
+                      
+                    {oddFortnightlyTask?.task && (
+                      <>
+                        {oddFortnightlyTask?.task.some(item => item.includes('General Waste')) && '🔴'}
+                        {oddFortnightlyTask?.task.some(item => item.includes('Recycling')) && '🟡'}
+                        {oddFortnightlyTask?.task.some(item => item.includes('FOGO')) && '🟢'}
+                      </>
+                    )}
+
+                    {listFortnightlyTasks}
+                    <button style={{ position: 'relative', right:'5px', height: '2.5em' }} onClick={submitFortnightlyTasks} >Submit</button>
+
+                    <p style={{ fontWeight: "700"}}>Monthly tasks:</p>
+                    {monthlyTask?.task && (
+                      <>
+                        {monthlyTask?.task.some(item => item.includes('General Waste')) && '🔴'}
+                        {monthlyTask?.task.some(item => item.includes('Recycling')) && '🟡'}
+                        {monthlyTask?.task.some(item => item.includes('FOGO')) && '🟢'}
+                      </>
+                    )}
+
+
+                    {listMonthlyTasks}
+                    <button style={{ position: 'relative', right:'5px', height: '2.5em' }} onClick={submitMonthlyTasks} >Submit</button>
+                  </ul>
+            </div>
+            
           </div>
           <div className='background'></div>
       </LocalizationProvider>
-    //   )}
-      
-    // </div>
       )
   );
 }

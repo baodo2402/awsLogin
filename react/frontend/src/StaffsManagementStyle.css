@@ -1,0 +1,181 @@
+
+.staff-table {
+    position: sticky;
+    width: fit-content;
+    margin: 20px; 
+    font-size: 11px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.staff-table th, .staff-table td {
+    border: 1px solid #000000; /* Add borders to table cells */
+    padding: 8px;
+    width: fit-content;
+}
+
+.staff-management-container {
+    background-color: white;
+    max-height: 45em;
+    min-width: 40em;
+    max-width: 76.5em;
+    display: flex;
+    margin: 10px auto;
+    margin: 10px;
+    box-shadow: 3px 3px 2px rgba(0.3, 0.3, 0.3, 0.3);
+    display: flex;
+    flex-direction: column;
+    transition: .5s;
+}
+#table-name {
+    position: sticky;
+    display: flex;
+    background-color: rgb(255, 242, 225);
+    top: 0;
+    justify-content: center;
+    border-bottom: 0.5px solid #1d4680;
+    width: 100%;
+}
+
+.management-container {
+    position: absolute;
+    top: 5em;
+    display: flex;
+    flex-direction: row;
+}
+
+#table-content {
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.filter-form {
+    background-color: white;
+    position: relative;
+    top: 2em;
+    max-height: 15em;
+    overflow-y: auto;
+    width: 16.7em;
+    margin: 0 10px 10px 10px;
+    margin-top: 0;
+    padding: 0 10px 10px 10px;
+    border-radius: 8px;
+    box-shadow: 3px 3px 2px rgba(0.3, 0.3, 0.3, 0.3);
+    
+}
+
+/* Style the scrollbar for WebKit (Chrome, Safari) */
+.filter-form::-webkit-scrollbar {
+    width: 10px;
+    height: 8px;
+}
+
+.filter-form::-webkit-scrollbar-thumb {
+    background-color: rgb(246, 187, 111);
+    border-radius: 8px;
+    height: 1em;
+}
+
+.filter-form::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    height: 2em;
+    border-radius: 25px;
+}
+
+#filter-title {
+    position: sticky;
+    background-color: white;
+    top: 0;
+    margin: 0;
+}
+.filter-input-form input {
+    background-color: white !important;
+    border-radius: 0 !important;
+    font-size: 17px;
+    border: none;
+    height: 100%;
+}
+
+
+
+.filter-input-form .filter-input {
+    background-color: rgb(247, 238, 225) !important;
+    border-radius: 0 !important;
+    height: 2.5em;
+    font-size: 10px;
+    border: 0.7px solid black;
+}
+
+.filter-submit-button-container {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+.filter-input-form .calendar-picker-input {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    background-color: #000000;
+}
+
+#filter-submit-button, #clear-button {
+    background-color: #90eee8;
+    border-radius: 5px;
+    width: 4em;
+    height: 2em;
+    border: 1px solid #000000;
+    box-shadow: 2px 2px 3px rgba(0.3, 0.3, 0.3, 0.3);
+    font-weight: 550;
+    color: white;
+    cursor: pointer;
+    margin: 2px;
+}
+
+#filter-submit-button:hover, #clear-button:hover {
+    background-color: rgba(243, 188, 130, 0.884);;
+    transition: 0.3s;
+}
+
+#download-button, #refresh-button {
+    position: sticky;
+    background-color: rgba(243, 188, 130, 0.884);
+    border-radius: 5px;
+    width: 9em;
+    height: 2.5em;
+    border: 1px solid #000000;
+    box-shadow: 2px 2px 3px rgba(0.3, 0.3, 0.3, 0.3);
+    font-weight: 700;
+    color: white;
+    margin: 15px;
+    cursor: pointer;
+    -webkit-text-stroke: 1px solid black;
+}
+
+#download-button:hover, #refresh-button:hover {
+    background-color: #a5e4eed4;
+    transition: 0.3s;
+}
+#refresh-button {
+    width: 2.5em;
+    border-radius: 50px;
+    font-weight: bold;
+}
+#download-icon {
+    font-size: 18px;
+}
+
+#copy-button {
+    font-size: 11px;
+    background-color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+#copy-button:active {
+    background-color: #c9dce8;
+}

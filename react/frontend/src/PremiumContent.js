@@ -7,8 +7,14 @@ import './premiumContentStyle.css'
 import { HiOutlineLogout } from 'react-icons/hi';
 import { BsCalendarCheck } from 'react-icons/bs';
 import { CgProfile } from 'react-icons/cg';
+import { PiQuestion } from "react-icons/pi";
 import Logo from './image/cleanntidyLogo.png';
+import { RiHome3Line } from "react-icons/ri";
 import { Header } from './Header';
+import maleCleanerImage from './image/male-cleaner.png';
+import { PiSunDuotone } from "react-icons/pi";
+import ColumTaskBar from './ColumnTaskBar';
+import QuickAccessButton from './QuickAccessButton';
 
 
 const PremiumLayout = ({ children }) => {
@@ -24,73 +30,67 @@ const PremiumContent = (props) => {
     const navigate = useNavigate();
     const user = getUser();
     const name = user !== 'undefined' && user ? user.name : '';
+    const email = user !== 'undefined' && user ? user.email : '';
+
     //const loginUsername = user !== 'undefined' && user ? user.username : '';
-    const logoutHandler = () => {
-        resetUserSession();
-        //props.history.push('/login');
-        navigate('/login');
-    }
-    const profileHandler = () => {
-        navigate('/profile');
+
+    const staffsManagementHandler = () => {
+        navigate('/staff-management')
     }
 
-    const admindCalendarhadler = () => {
-        navigate('/calendaroption')
-    }
-    const canlendarHandler = () => {
-        const userEmail = user && user ? user.email : '';
-        if (userEmail === 'cleanntidy.au@outlook.com' || userEmail === 'thienbao1084@gmail.com' || userEmail === 'danghung0224@gmail.com' || userEmail === 'test2@gmail.com') {
-            navigate('/calendarsearching');
-        } else {
-            navigate('/calendar');
-        }
-        
-    }
-    
     const [isActive, setIsActive] = useState(false);
 
-     const toggleMenu = () => {
-        setIsActive(!isActive);
-     };
 
     
     return (
         <div>
-
+        <div className='background'></div>
         <header className='account-layout'>
             <img src={Logo}
-                style={{ width: '1.2em', height: '1.2em', objectFit: 'cover',
-                 }} />   Hello {name}
-                <input type='checkbox' id="menu-toggle" className='dropdown-input' />
-                <label className={`hamburger ${isActive ? 'active' : ''}` } htmlFor="menu-toggle" onClick={toggleMenu}>
-                    <div className="line"></div>
-                    <div className="line"></div>
-                    <div className="line"></div>
-                </label>
+                style={{ width: '1.5em', height: '1.25em', objectFit: 'cover',
+                 }} />
+                  <h1 id='clean-n-tidy-tittle'>
+                    Clean 'n' Tidy
+                 </h1>
 
-                <section id='dropdown-content'>
-                    <button id="item" style={{'--i': 1}}  onClick={logoutHandler}>
-                        Logout <HiOutlineLogout />
-                    </button><br />
-                    <button id="item" style={{'--i': 2}} onClick={profileHandler}>
-                    Profile <CgProfile />
-                    </button><br />
-                    <button id="item" style={{'--i': 3}} onClick={canlendarHandler}>
-                        Calendar <BsCalendarCheck />
-                    </button>
-                </section>
-            
         </header>
-                 <div className='blank'></div>
-                <div className='background-img'></div>
+        <ColumTaskBar />
+
+
+        <div className='welcome-section'>
+            <p>
+            <span>
+                <div id='sunWrapper'>
+                    <PiSunDuotone id='sunIcon' />
+                </div> Hello
+            </span> {name.split(' ')[0]} <br /> Start your Shift here</p>
+        </div>
+        <img src={maleCleanerImage} id='male-cleaner-premium' />
+
+        {/* <div style={{
+            display: 'flex',
+            flexWrap: 'wrap', // Allow items to wrap onto the next line
+            maxWidth: '40em',
+            margin: '0 auto',
+            backgroundColor: "rgb(245, 230, 210)",
+            justifyContent: "center",
+            zIndex: '5',
+            borderRadius: "15px"
+        }}>
+        <QuickAccessButton navigateTo="/location" title="Punch Clock" description="Start your shift here" />
+        <QuickAccessButton title="Missed Punch Clock" description="Missed to clock in or out? Report it here" />
+        <QuickAccessButton title="Report" description="Report any damange, incident, and more" />
+        <QuickAccessButton  title="Test1" description="Start your shift here" />
+        <QuickAccessButton title="Test" description="Missed to clock in or out? Report it here" />
+        </div>          */}
+
+
         <LocationFinder />
+        
 
         </div>
         
 
     )
 }
-// const user = getUser();
-// const loginUsername = user !== 'undefined' && user ? user.username : '';
-// export { loginUsername };
 export default PremiumContent;

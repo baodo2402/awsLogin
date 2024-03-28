@@ -6,18 +6,77 @@
     --speed: 400ms;
 }
 .profile-info {
-    margin: 0px auto;
-    margin-top: 50px;
-    margin-bottom: 0;
+  margin-top: 100px;
+  margin: 5% auto 5% auto;
+  font-size: 20px;
+  font-weight: 500;
+  padding: 0;
+  background-color: white;
+  border-radius: 10px;
+  max-width: 90%;
+  box-shadow: 3px 3px 5px rgba(0.5, 0.5, 0.5, 0.5);
+  z-index: 2;
+
+}
+
+.password-field.active {
+  margin: 5% auto 5% auto;
+  background-color: white;
+  height: 15em;
+  border-radius: 10px;
+  padding: 15px;
+  opacity: 1;
+  visibility: visible;
+  transition: var(--speed) ease;
+  z-index: 1;
+  max-width: 22em;
+  }
+
+.password-field.inactive {
+  margin: 5% auto 5% auto;
+  background-color: white;
+  height: 0;
+  border-radius: 10px;
+  padding: 15px;
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--speed) ease;
+  z-index: 0;
+  max-width: 22em;
+}
+
+.profile-button {
+  cursor: pointer;
+  width: 100%;
+  height: 40px;
+  border-radius: 0 0 10px 10px;
+  border: none;
+  font-size: 17px;
+  font-weight: 600;
+  color: white;
+  background-color: #e7a22b;
+}
+
+@media (min-width: 800px) {
+  .profile-info {
+    margin-top: 100px;
+    margin: 5% auto 5% auto;
     font-size: 20px;
     font-weight: 500;
     padding: 0;
     background-color: white;
     border-radius: 10px;
-    max-width: 90%;
     box-shadow: 3px 3px 5px rgba(0.5, 0.5, 0.5, 0.5);
     z-index: 2;
-
+    max-width: 25em;
+  
+  } 
+  .password-field.active {
+    max-width: 29em;
+  }
+  .password-field.inactive {
+    max-width: 29em;
+  }
 }
 
 .profile-info h5 {
@@ -39,35 +98,19 @@
 #profile-content p {
   margin: 0;
 }
-.password-field.active {
-  margin: 20px;
-    background-color: white;
-    height: 10em;
-    border-radius: 10px;
-    padding: 15px;
-    opacity: 1;
-    visibility: visible;
-    transition: var(--speed) ease;
-    z-index: 1;
-  }
 
-  .password-field.inactive {
-    margin: 20px;
-    background-color: white;
-    height: 0;
-    border-radius: 10px;
-    padding: 15px;
-    opacity: 0;
-    visibility: hidden;
-    transition: var(--speed) ease;
-    z-index: 0;
-  }
 
 .trigger-change-info {
   padding: 0.1px 15px 15px 15px;
   background-color: white;
-  margin: 15px;
+  margin: 35px auto;
   border-radius: 10px;
   height: 25em;
   box-shadow: 5px 5px 5px rgba(0.2, 0.2, 0.2, 0.2);
+  max-width: 22em;
+}
+@media (min-width: 800px) {
+  .trigger-change-info {
+    max-width: 30em;
+  }
 }

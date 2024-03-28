@@ -5,9 +5,11 @@ import './index.css';
 import { useNavigate } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import maleCleanerImage from './image/male-cleaner.png'
+import femaleCleanerImage from './image/female-cleaner.png'
+import AccessInformation from './service/AccessInformation';
 
-const loginUrl = 'https://lyg1apc3wl.execute-api.ap-southeast-2.amazonaws.com/prod/login';
-
+const { loginUrl, requestConfig } = AccessInformation
 
 const Login = (props) => {
     const [email, setEmail] = useState('');
@@ -27,11 +29,6 @@ const Login = (props) => {
         
         setErrorMessage(null);
 
-        const requestConfig = {
-            headers: {
-                'x-api-key': 'EmYB7EcYzn2NK1dUkD2kK8MA18r5dp6tQ7wB7U1d'
-            }
-        }
         const requestBody = {
             email: email,
             password: password
@@ -59,31 +56,45 @@ const Login = (props) => {
     const Contact = () => {
         navigate('/forgetpassword');
     }
+
+    const navigateToRegister = () => {
+        navigate('/register');
+    }
     return (
-        <div className='login-layout'>
-            <section className='login-head'>
-                <h1>Login</h1>
-            </section>
-            
-            <section>
-                <form onSubmit={submitHandler}>
-                    Email: <br/><input type="text" value={email} placeholder='Email' onChange={event => setEmail(event.target.value)} /> <br/>
-                    Password: <br/><input type="password" value={password} placeholder='******'onChange={event => setPassword(event.target.value)} /> <br/>
-                    
-                    <input type="submit" value="Login" />
-                    {errorMessage && <p style={{position: 'relative', top: '2em', zIndex: "999"}}>{errorMessage}</p>}
-                </form>
-                <button style={{ borderRadius: '25px', border: "none", margin: "5px", color: 'blue' }} onClick={Contact}>Forget Password?</button>
+        <div className='login-frame'>
+        <div className='login-container'>
+            <img src={maleCleanerImage} id='male-cleaner' />
+            <div className='login-layout'>
+                <section className='login-head'>
+                    <h1>Login</h1>
+                </section>
+                
+                <section>
+                    <form onSubmit={submitHandler}>
+                        Email: <br/><input type="text" value={email} placeholder='Email' onChange={event => setEmail(event.target.value)} /> <br/>
+                        Password: <br/><input type="password" value={password} placeholder='*******'onChange={event => setPassword(event.target.value)} /> <br/>
+                        
+                        <input type="submit" value="Login" />
+                        {errorMessage && <p style={{position: 'relative', top: '2em', zIndex: "999"}}>{errorMessage}</p>}
+                    </form>
+                    <button style={{ borderRadius: '25px', border: "none", margin: "5px", color: 'blue' }} onClick={Contact}>Forget Password?</button>
+                    <button style={{ borderRadius: '25px', border: "none", marginLeft: "15px", color: 'blue' }} onClick={navigateToRegister}>Haven't created an account yet?</button>
+                </section>
+                
 
-            </section>
+                {loading && (
+                    <Box sx={{ position: "fixed", top: "40%", left: "45%", zIndex: "1000" }}>
+                    <CircularProgress />
+                    </Box>
+                )}
+                
 
-            {loading && (
-                <Box sx={{ position: "fixed", top: "40%", left: "45%", zIndex: "1000" }}>
-                <CircularProgress />
-                </Box>
-            )}
-
-            <div className="background"></div>
+                <div className="background"></div>
+                
+            </div>
+        </div>
+        
+        
         </div>
     )
 }
